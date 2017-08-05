@@ -1,8 +1,10 @@
 package com.example.gregorio.filmpt1;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -12,7 +14,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private ImageView mImageDisplay;
 
-    private String mImage;
+    private int mImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +27,10 @@ public class DetailActivity extends AppCompatActivity {
 
         if (intentThatStartedThisActivity != null) {
             if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
-                mImage = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
-
-            mImageDisplay.setImageResource(Integer.parseInt(mImage));
+                String mImage = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
+                mImageDisplay.setImageResource(Integer.parseInt(mImage));
             }
         }
-    }
+            }
+        }
 
-}

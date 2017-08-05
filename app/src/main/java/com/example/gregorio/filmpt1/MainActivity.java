@@ -2,6 +2,7 @@ package com.example.gregorio.filmpt1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,11 +10,15 @@ import android.support.v7.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler {
 
-    RecyclerView recyclerView;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
-    GridLayoutManager layoutManager;
+    private RecyclerView recyclerView;
+
+    private GridLayoutManager layoutManager;
 
     private FilmAdapter mFilmAdapter;
+
+
 
 
     private int filmPosters [] = {
@@ -35,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         recyclerView.setLayoutManager(layoutManager);
 
-        mFilmAdapter = new FilmAdapter(MainActivity.this, filmPosters);
+        mFilmAdapter = new FilmAdapter(this);
 
         recyclerView.setAdapter(mFilmAdapter);
 
@@ -43,10 +48,10 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     }
 
     @Override
-    public void onClick(int film) {
+    public void onClick(String film) {
         Context context = this;
-        Class detailClass = DetailActivity.class;
-        Intent intentToStartDetailActivity = new Intent(context, detailClass);
+        Class destinationClass = DetailActivity.class;
+        Intent intentToStartDetailActivity = new Intent(context, destinationClass);
         intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, film);
         startActivity(intentToStartDetailActivity);
 

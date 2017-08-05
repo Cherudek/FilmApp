@@ -1,37 +1,38 @@
 package com.example.gregorio.filmpt1;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ViewUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v7.appcompat.*;
 import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
-
 
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
     public static final String LOG_TAG = MainActivity.class.getName();
 
-    private Context context;
+    //private int images[];
 
-    private int images[];
+    private int images [] = {
+            R.drawable.bluesbrothers, R.drawable.drive,
+            R.drawable.fight_club, R.drawable.grease, R.drawable.jaws,
+            R.drawable.pulp_fiction, R.drawable.star_wars
+    };
 
     /*
  * An on-click handler that we've defined to make it easy for an Activity to interface with
  * our RecyclerView
  */
-    private FilmAdapterOnClickHandler mClickHandler;
+    private final FilmAdapterOnClickHandler mClickHandler;
 
     /**
      * The interface that receives onClick messages.
      */
     public interface FilmAdapterOnClickHandler {
-        void onClick(int film);
+        void onClick(String film);
     }
 
     /**
@@ -46,36 +47,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
     }
 
 
-    public FilmAdapter(Context context, int[] images) {
-        this.context = context;
-        this.images = images;
-    }
-
-    @Override
-    public FilmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_layout, null);
-
-        FilmHolder filmHolder = new FilmHolder(layout);
-
-        return filmHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(FilmHolder holder, int position) {
-        holder.img.setImageResource(images[position]);
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return images.length;
-    }
-
-
     public class FilmHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        ImageView img;
+        public final ImageView img;
 
         public FilmHolder(View itemView) {
             super(itemView);
@@ -86,17 +59,38 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
         @Override
         public void onClick(View v) {
-
             int adapterPosition = getAdapterPosition();
-            Log.i(LOG_TAG, "TEST: film ID is " + adapterPosition);
-
+            Log.i(LOG_TAG, "TEST: position ID is " + adapterPosition);
             int film = images[adapterPosition];
             Log.i(LOG_TAG, "TEST: film ID is " + film);
+            mClickHandler.onClick(String.valueOf(film));
 
-            mClickHandler.onClick(film);
 
         }
     }
 
+    @Override
+    public FilmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        int layoutIdForGridItem = R.layout.grid_layout;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        boolean shouldAttachToParentImmediately = false;
 
+        View view = inflater.inflate(layoutIdForGridItem, parent, shouldAttachToParentImmediately);
+        return new FilmHolder(view);
+
+    }
+
+    @Override
+    public void onBindViewHolder(FilmHolder holder, int position) {
+
+        int film = images[position];
+        holder.img.setImageResource(film);
+    }
+
+    @Override
+    public int getItemCount() {
+        if (images == null) return 0;
+        return images.length;
+    }
 }
