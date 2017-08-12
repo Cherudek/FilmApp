@@ -18,12 +18,15 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
  * our RecyclerView
  */
     private final FilmAdapterOnClickHandler mClickHandler;
-    private int images[] = {
-            R.drawable.bluesbrothers, R.drawable.drive,
-            R.drawable.fight_club, R.drawable.grease, R.drawable.jaws,
-            R.drawable.pulp_fiction, R.drawable.star_wars, R.drawable.weekend,
-            R.drawable.ghostdog, R.drawable.leon, R.drawable.et, R.drawable.clockwork_orange
-    };
+
+    private String[] mMovieData;
+
+//    private int images[] = {
+//            R.drawable.bluesbrothers, R.drawable.drive,
+//            R.drawable.fight_club, R.drawable.grease, R.drawable.jaws,
+//            R.drawable.pulp_fiction, R.drawable.star_wars, R.drawable.weekend,
+//            R.drawable.ghostdog, R.drawable.leon, R.drawable.et, R.drawable.clockwork_orange
+//    };
 
     /**
      * Creates a FilmAdapter.
@@ -49,14 +52,14 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
     @Override
     public void onBindViewHolder(FilmHolder holder, int position) {
-        int film = images[position];
-        holder.img.setImageResource(film);
+        String film = mMovieData[position];
+        holder.img.setImageResource(Integer.parseInt(film));
     }
 
     @Override
     public int getItemCount() {
-        if (images == null) return 0;
-        return images.length;
+        if (mMovieData == null) return 0;
+        return mMovieData.length;
     }
 
     /**
@@ -80,7 +83,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Log.i(LOG_TAG, "TEST: position ID is " + adapterPosition);
-            int film = images[adapterPosition];
+            String film = mMovieData[adapterPosition];
             Log.i(LOG_TAG, "TEST: film ID is " + film);
             mClickHandler.onClick(String.valueOf(film));
         }
