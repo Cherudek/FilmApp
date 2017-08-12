@@ -101,6 +101,8 @@ public class QueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
+                Log.v(LOG_TAG, "Built URI " + url);
+
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {

@@ -26,7 +26,7 @@ import static com.example.gregorio.filmpt1.QueryUtils.fetchMovieData;
 
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Film>> {
 
-    final static String API_KEY_PARAM = "api_key=";
+    final static String API_KEY_PARAM = "api_key";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int FILM_LOADER_ID = 1;
     private static final String apiKey = "21d79bfbb630e90306b78b394f98db52";
