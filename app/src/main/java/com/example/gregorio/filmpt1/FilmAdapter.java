@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
     public static final String LOG_TAG = MainActivity.class.getName();
@@ -20,6 +24,17 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
     private final FilmAdapterOnClickHandler mClickHandler;
 
     private String[] mMovieData;
+
+
+    // A copy of the original mObjects array, initialized from and then used instead as soon as
+    private ArrayList<Film> mOriginalValues;
+
+    /**
+     * Contains the list of objects that represent the data of this ArrayAdapter.
+     * The content of this list is referred to as "the array" in the documentation.
+     */
+    private List<Film> mObjects;
+
 
 //    private int images[] = {
 //            R.drawable.bluesbrothers, R.drawable.drive,
@@ -61,6 +76,44 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
         if (mMovieData == null) return 0;
         return mMovieData.length;
     }
+
+    /**
+     * Adds the specified items at the end of the array.
+     *
+     * @param items The items to add at the end of the array.
+     */
+    public void addAll(Film... items) {
+
+        if (mOriginalValues != null) {
+            Collections.addAll(mOriginalValues, items);
+        }
+
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Remove all elements from the list.
+     */
+    public void clear() {
+
+        if (mOriginalValues != null) {
+            mOriginalValues.clear();
+        }
+
+        notifyDataSetChanged();
+    }
+//
+//    public void addAll(ArrayList<Film> films, ArrayList<Film> items) {
+//        items.addAll(films);
+//        notifyDataSetChanged();
+//    }
+//
+//
+//
+//    public void clear(ArrayList movies) {
+//        movies.clear();
+//        notifyDataSetChanged();
+//    }
 
     /**
      * The interface that receives onClick messages.

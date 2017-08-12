@@ -34,6 +34,7 @@ public class QueryUtils {
 
     public static ArrayList<Film> fetchMovieData(String requestUrl) {
         Log.v(LOG_TAG, "TEST: Fetch Film Data");
+
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -53,7 +54,7 @@ public class QueryUtils {
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Film}s
-        ArrayList<Film> movies = extractFeatureFromJson(jsonResponse);
+        ArrayList<Film> movies = extractResultsFromJson(jsonResponse);
 
         // Return the list of {@link Film}s
         return movies;
@@ -137,7 +138,7 @@ public class QueryUtils {
      * Return a list of {@link Film} objects that has been built up from
      * parsing the given JSON response.
      */
-    private static ArrayList<Film> extractFeatureFromJson(String moviesJSON) {
+    private static ArrayList<Film> extractResultsFromJson(String moviesJSON) {
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(moviesJSON)) {
             return null;

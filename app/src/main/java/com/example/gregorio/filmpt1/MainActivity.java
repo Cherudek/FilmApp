@@ -26,14 +26,12 @@ import static com.example.gregorio.filmpt1.QueryUtils.fetchMovieData;
 
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Film>> {
 
-    final static String API_KEY_PARM = "api_key=";
+    final static String API_KEY_PARAM = "api_key=";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int FILM_LOADER_ID = 1;
-    private static final String DEFAULT_MOVIE_DB_URL = "http://image.tmdb.org/t/p/movie/popular";
-
     private static final String apiKey = "21d79bfbb630e90306b78b394f98db52";
 
-    private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/popular?api_key=21d79bfbb630e90306b78b394f98db52";
+    private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/popular?";
 
     private RecyclerView recyclerView;
 
@@ -49,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         /* This TextView is used to display errors and will be hidden if there are no errors */
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
@@ -68,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_spinner);
 
-        loadMovieData();
+        //loadMovieData();
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -89,8 +86,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         } else {
             // Otherwise, display error
             // First, hide loading indicator so error message will be visible
-            View loadingIndicator = findViewById(R.id.loading_spinner);
-            loadingIndicator.setVisibility(View.GONE);
+            mLoadingIndicator.setVisibility(View.GONE);
             // Update empty state with no connection error message
             mErrorMessageDisplay.setText(R.string.no_internet);
             Log.i(LOG_TAG, "TEST: No Internet Connectivity");
@@ -114,10 +110,10 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         Uri baseUri = Uri.parse(MOVIE_DB_API_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("api-key", "591c3b4c-30e9-4ac7-8ded-8d3f1086c46e");
+        Uri.Builder baseAndKey = uriBuilder.appendQueryParameter(API_KEY_PARAM, apiKey);
         //uriBuilder.appendQueryParameter("orderby", orderBy);
 
-        return new FilmLoader(this, uriBuilder.toString());
+        return new FilmLoader(this, baseAndKey.toString());
     }
 
     @Override
@@ -125,17 +121,18 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         Log.v(LOG_TAG, "TEST: Loader Cleared");
 
         // Hide loading indicator because the data has been loaded
-        View loadingIndicator = findViewById(R.id.loading_spinner);
-        loadingIndicator.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.GONE);
+        showMovieDataView();
+
 
         // Clear the adapter of previous movie data
-        mFilmAdapter.
+        mFilmAdapter.clear();
 
         // If there is a valid list of {@link movie}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
 
-            mFilmAdapter.
+            mFilmAdapter.addAll();
         } else {
             showErrorMessage();
         }
@@ -146,20 +143,21 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         Log.v(LOG_TAG, "TEST: Loader cleared of existing data");
 
         // Loader reset, so we can clear out our existing data.
-        mFilmAdapter.
+        mFilmAdapter.clear();
     }
 
 
 
 
     /**
-     * This method will get the user's preferred location for weather, and then tell some
+     * This method will get the user's default(popular) request for movies, and then tell some
      * background method to get the weather data in the background.
      */
     private void loadMovieData() {
-        showMovieDataView();
+
         //new FetchMoviesTask().execute();
         fetchMovieData(MOVIE_DB_API_REQUEST_URL);
+        showMovieDataView();
     }
 
     /**
