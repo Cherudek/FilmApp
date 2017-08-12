@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         uriBuilder.appendQueryParameter("api-key", "591c3b4c-30e9-4ac7-8ded-8d3f1086c46e");
         //uriBuilder.appendQueryParameter("orderby", orderBy);
 
-        return new NewsLoader(this, uriBuilder.toString());
+        return new FilmLoader(this, uriBuilder.toString());
     }
 
     @Override
@@ -129,12 +129,13 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         loadingIndicator.setVisibility(View.GONE);
 
         // Clear the adapter of previous movie data
-        mFilmAdapter.clear();
+        mFilmAdapter.
 
         // If there is a valid list of {@link movie}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
-            mFilmAdapter.addAll(newses);
+
+            mFilmAdapter.
         } else {
             showErrorMessage();
         }
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         Log.v(LOG_TAG, "TEST: Loader cleared of existing data");
 
         // Loader reset, so we can clear out our existing data.
-        mFilmAdapter.clear();
+        mFilmAdapter.
     }
 
 
