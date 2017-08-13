@@ -23,7 +23,8 @@
             android:id="@+id/loading_spinner"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <ImageView
             android:id="@+id/empty_image_view"

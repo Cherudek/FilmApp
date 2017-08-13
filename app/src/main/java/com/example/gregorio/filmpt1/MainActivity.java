@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     private ProgressBar mLoadingIndicator;
 
+    private List<Film> movies;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,17 +124,18 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         // Hide loading indicator because the data has been loaded
         mLoadingIndicator.setVisibility(View.GONE);
-        showMovieDataView();
-
 
         // Clear the adapter of previous movie data
         mFilmAdapter.clear();
+
 
         // If there is a valid list of {@link movie}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
 
             mFilmAdapter.addAll();
+            showMovieDataView();
+
         } else {
             showErrorMessage();
         }
@@ -145,9 +148,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         // Loader reset, so we can clear out our existing data.
         mFilmAdapter.clear();
     }
-
-
-
 
     /**
      * This method will get the user's default(popular) request for movies, and then tell some
@@ -210,51 +210,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
 }
 
-//    public class FetchMoviesTask extends AsyncTask<String, Void, String[]> {
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            mLoadingIndicator.setVisibility(View.VISIBLE);
-//        }
-//
-//        @Override
-//        protected String[] doInBackground(String... params) {
-//
-//            /* If there's no zip code, there's nothing to look up. */
-//            if (params.length == 0) {
-//                return null;
-//            }
-//
-//            String sortBy = params[0];
-//            URL movieRequestUrl = QueryUtils.buildUrl(sortBy);
-//
-//            try {
-//                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
-//
-//                String[] simpleJsonWeatherData = fetchMovieData(jsonMovieResponse);
-//
-//
-//                return simpleJsonWeatherData;
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return null;
-//            }
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String[] movieData) {
-//            mLoadingIndicator.setVisibility(View.INVISIBLE);
-//            if (movieData != null) {
-//                showMovieDataView();
-//                recyclerView.setVisibility(View.VISIBLE);
-//            } else {
-//                showErrorMessage();
-//            }
-//        }
-//
-//    }
-//
+
 
 

@@ -8,40 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
+
 import java.util.Collections;
 import java.util.List;
 
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
-    public static final String LOG_TAG = MainActivity.class.getName();
-
-    //Dummy Images to test the the RecyclerView and the DetailView explicit Intent;
+    public static final String LOG_TAG = FilmAdapter.class.getName();
     /*
  * An on-click handler that we've defined to make it easy for an Activity to interface with
  * our RecyclerView
  */
     private final FilmAdapterOnClickHandler mClickHandler;
-
-    private String[] mMovieData;
-
-
     // A copy of the original mObjects array, initialized from and then used instead as soon as
-    private ArrayList<Film> mOriginalValues;
-
-    /**
-     * Contains the list of objects that represent the data of this ArrayAdapter.
-     * The content of this list is referred to as "the array" in the documentation.
-     */
-    private List<Film> mObjects;
-
-
-//    private int images[] = {
-//            R.drawable.bluesbrothers, R.drawable.drive,
-//            R.drawable.fight_club, R.drawable.grease, R.drawable.jaws,
-//            R.drawable.pulp_fiction, R.drawable.star_wars, R.drawable.weekend,
-//            R.drawable.ghostdog, R.drawable.leon, R.drawable.et, R.drawable.clockwork_orange
-//    };
+    private List<Film> mMovieData;
+    private Context mContext;
+    private LayoutInflater inflater;
 
     /**
      * Creates a FilmAdapter.
@@ -58,7 +41,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
     public FilmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         int layoutIdForGridItem = R.layout.grid_layout;
-        LayoutInflater inflater = LayoutInflater.from(context);
+        inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForGridItem, parent, shouldAttachToParentImmediately);
@@ -67,27 +50,33 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
     @Override
     public void onBindViewHolder(FilmHolder holder, int position) {
-        String film = mMovieData[position];
-        holder.img.setImageResource(Integer.parseInt(film));
+
+        //String film = mMovieData[position];
+        Film currentFilm = mMovieData.get(position);
+        Log.i(LOG_TAG, "TEST: Current Film is " + currentFilm);
+
+        String filmPoster = currentFilm.getmThumbnail();
+        Log.i(LOG_TAG, "TEST: Poster url is " + filmPoster);
+
+
+        Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185/" + filmPoster).into(holder.img);
     }
 
     @Override
     public int getItemCount() {
         if (mMovieData == null) return 0;
-        return mMovieData.length;
+        return mMovieData.toArray().length;
     }
 
     /**
      * Adds the specified items at the end of the array.
      *
-     * @param items The items to add at the end of the array.
+     * @param movies
      */
-    public void addAll(Film... items) {
-
-        if (mOriginalValues != null) {
-            Collections.addAll(mOriginalValues, items);
+    public void addAll(Film... movies) {
+        if (mMovieData != null) {
+            Collections.addAll(mMovieData, movies);
         }
-
         notifyDataSetChanged();
     }
 
@@ -95,25 +84,11 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      * Remove all elements from the list.
      */
     public void clear() {
-
-        if (mOriginalValues != null) {
-            mOriginalValues.clear();
+        if (mMovieData != null) {
+            mMovieData.clear();
         }
-
         notifyDataSetChanged();
     }
-//
-//    public void addAll(ArrayList<Film> films, ArrayList<Film> items) {
-//        items.addAll(films);
-//        notifyDataSetChanged();
-//    }
-//
-//
-//
-//    public void clear(ArrayList movies) {
-//        movies.clear();
-//        notifyDataSetChanged();
-//    }
 
     /**
      * The interface that receives onClick messages.
@@ -124,6 +99,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
     // The Film Holder optimizes the calling and binding of views from the adaptor to the UI
     public class FilmHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         public final ImageView img;
 
         public FilmHolder(View itemView) {
@@ -136,7 +112,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Log.i(LOG_TAG, "TEST: position ID is " + adapterPosition);
-            String film = mMovieData[adapterPosition];
+            String film = String.valueOf(mMovieData.get(adapterPosition));
             Log.i(LOG_TAG, "TEST: film ID is " + film);
             mClickHandler.onClick(String.valueOf(film));
         }
