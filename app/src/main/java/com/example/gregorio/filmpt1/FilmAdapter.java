@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
@@ -22,9 +22,11 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
  */
     private final FilmAdapterOnClickHandler mClickHandler;
     // A copy of the original mObjects array, initialized from and then used instead as soon as
-    private List<Film> mMovieData;
-    private Context mContext;
-    private LayoutInflater inflater;
+    private List<Film> mMovieData = new ArrayList<>();
+    private List<Film> items = new ArrayList<>();
+    private Context context;
+
+
 
     /**
      * Creates a FilmAdapter.
@@ -33,39 +35,38 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      *                     when an item is clicked.
      *
      */
-    public FilmAdapter(FilmAdapterOnClickHandler clickHandler) {
+    public FilmAdapter(FilmAdapterOnClickHandler clickHandler, List<Film> numberOfItems) {
         mClickHandler = clickHandler;
+        items = numberOfItems;
     }
 
-    @Override
-    public FilmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        int layoutIdForGridItem = R.layout.grid_layout;
-        inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate(layoutIdForGridItem, parent, shouldAttachToParentImmediately);
+    @Override
+    public FilmHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        Context context = viewGroup.getContext();
+        int layoutIdForGridItem = R.layout.grid_layout;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        boolean shouldAttachToParentImmediately = false;
+        View view = inflater.inflate(layoutIdForGridItem, viewGroup, shouldAttachToParentImmediately);
         return new FilmHolder(view);
     }
 
     @Override
     public void onBindViewHolder(FilmHolder holder, int position) {
 
-        //String film = mMovieData[position];
-        Film currentFilm = mMovieData.get(position);
+        Film currentFilm = items.get(position);
         Log.i(LOG_TAG, "TEST: Current Film is " + currentFilm);
 
         String filmPoster = currentFilm.getmThumbnail();
         Log.i(LOG_TAG, "TEST: Poster url is " + filmPoster);
 
-
-        Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185/" + filmPoster).into(holder.img);
+        Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + filmPoster).into(holder.img);
     }
 
     @Override
     public int getItemCount() {
-        if (mMovieData == null) return 0;
-        return mMovieData.toArray().length;
+        return mMovieData.size();
+
     }
 
     /**
@@ -73,20 +74,20 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      *
      * @param movies
      */
-    public void addAll(Film... movies) {
-        if (mMovieData != null) {
-            Collections.addAll(mMovieData, movies);
-        }
+    public void addAll(List<Film> movies) {
+        if (mMovieData != null)
+            items.clear();
+        items.addAll(movies);
         notifyDataSetChanged();
+
     }
 
     /**
      * Remove all elements from the list.
      */
     public void clear() {
-        if (mMovieData != null) {
-            mMovieData.clear();
-        }
+        if (mMovieData != null)
+            items.clear();
         notifyDataSetChanged();
     }
 

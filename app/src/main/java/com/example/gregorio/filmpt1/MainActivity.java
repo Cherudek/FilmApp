@@ -22,8 +22,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static com.example.gregorio.filmpt1.QueryUtils.fetchMovieData;
-
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Film>> {
 
     final static String API_KEY_PARAM = "api_key";
@@ -61,13 +59,11 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         recyclerView.setLayoutManager(layoutManager);
 
-        mFilmAdapter = new FilmAdapter(this);
+        mFilmAdapter = new FilmAdapter(this, movies);
 
         recyclerView.setAdapter(mFilmAdapter);
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_spinner);
-
-        //loadMovieData();
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -133,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
 
-            mFilmAdapter.addAll();
+            mFilmAdapter.addAll(movies);
             showMovieDataView();
 
         } else {
@@ -147,17 +143,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         // Loader reset, so we can clear out our existing data.
         mFilmAdapter.clear();
-    }
-
-    /**
-     * This method will get the user's default(popular) request for movies, and then tell some
-     * background method to get the weather data in the background.
-     */
-    private void loadMovieData() {
-
-        //new FetchMoviesTask().execute();
-        fetchMovieData(MOVIE_DB_API_REQUEST_URL);
-        showMovieDataView();
     }
 
     /**
