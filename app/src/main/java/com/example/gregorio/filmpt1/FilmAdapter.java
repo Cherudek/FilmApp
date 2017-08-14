@@ -23,7 +23,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
     private final FilmAdapterOnClickHandler mClickHandler;
     // A copy of the original mObjects array, initialized from and then used instead as soon as
     private List<Film> mMovieData = new ArrayList<>();
-    private List<Film> items = new ArrayList<>();
+    private int items;
     private Context context;
 
 
@@ -35,7 +35,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      *                     when an item is clicked.
      *
      */
-    public FilmAdapter(FilmAdapterOnClickHandler clickHandler, List<Film> numberOfItems) {
+    public FilmAdapter(FilmAdapterOnClickHandler clickHandler, int numberOfItems) {
         mClickHandler = clickHandler;
         items = numberOfItems;
     }
@@ -54,13 +54,14 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
     @Override
     public void onBindViewHolder(FilmHolder holder, int position) {
 
-        Film currentFilm = items.get(position);
+
+        Film currentFilm = mMovieData.get(position);
         Log.i(LOG_TAG, "TEST: Current Film is " + currentFilm);
 
         String filmPoster = currentFilm.getmThumbnail();
         Log.i(LOG_TAG, "TEST: Poster url is " + filmPoster);
 
-        Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + filmPoster).into(holder.img);
+        Picasso.with(holder.img.getContext()).load("http://image.tmdb.org/t/p/w185/" + filmPoster).into(holder.img);
     }
 
     @Override
@@ -76,10 +77,9 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      */
     public void addAll(List<Film> movies) {
         if (mMovieData != null)
-            items.clear();
-        items.addAll(movies);
+            mMovieData.clear();
+        mMovieData.addAll(movies);
         notifyDataSetChanged();
-
     }
 
     /**
@@ -87,7 +87,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      */
     public void clear() {
         if (mMovieData != null)
-            items.clear();
+            mMovieData.clear();
         notifyDataSetChanged();
     }
 

@@ -25,8 +25,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Film>> {
 
     final static String API_KEY_PARAM = "api_key";
+
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     private static final int FILM_LOADER_ID = 1;
+
     private static final String apiKey = "21d79bfbb630e90306b78b394f98db52";
 
     private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/popular?";
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     private ProgressBar mLoadingIndicator;
 
-    private List<Film> movies;
+    private int numberOFMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         recyclerView.setLayoutManager(layoutManager);
 
-        mFilmAdapter = new FilmAdapter(this, movies);
+        mFilmAdapter = new FilmAdapter(this, numberOFMovies);
 
         recyclerView.setAdapter(mFilmAdapter);
 
@@ -122,12 +125,14 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         mLoadingIndicator.setVisibility(View.GONE);
 
         // Clear the adapter of previous movie data
-        mFilmAdapter.clear();
+        //mFilmAdapter.clear();
 
 
         // If there is a valid list of {@link movie}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
+
+            numberOFMovies = movies.size();
 
             mFilmAdapter.addAll(movies);
             showMovieDataView();
