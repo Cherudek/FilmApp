@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
             loaderManager.initLoader(FILM_LOADER_ID, null, this);
-            Log.v(LOG_TAG, "TEST: Calling the LoaderCallBack");
 
         } else {
             // Otherwise, display error
@@ -90,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
             mLoadingIndicator.setVisibility(View.GONE);
             // Update empty state with no connection error message
             mErrorMessageDisplay.setText(R.string.no_internet);
-            Log.i(LOG_TAG, "TEST: No Internet Connectivity");
-
         }
     }
 
@@ -100,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
         //onCreateLoader() method to read the user’s latest preferences for the minimum magnitude,
         //construct a proper URI with their preference, and then create a new Loader for that URI.
-
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String orderBy = sharedPrefs.getString(
@@ -110,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         Uri baseUri = Uri.parse(MOVIE_DB_API_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
-
         Uri.Builder baseAndKey = uriBuilder.appendQueryParameter(API_KEY_PARAM, apiKey);
         //uriBuilder.appendQueryParameter("orderby", orderBy);
 
@@ -127,12 +122,9 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         // If there is a valid list of {@link movie}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
-
             numberOFMovies = movies.size();
-
             mFilmAdapter.addAll(movies);
             showMovieDataView();
-
         } else {
             showErrorMessage();
         }
@@ -140,8 +132,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     @Override
     public void onLoaderReset(Loader<List<Film>> loader) {
-        Log.v(LOG_TAG, "TEST: Loader cleared of existing data");
-
         // Loader reset, so we can clear out our existing data.
         mFilmAdapter.clear();
     }
@@ -174,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
         intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, film);
         startActivity(intentToStartDetailActivity);
-
     }
 
     @Override
@@ -193,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
 
 

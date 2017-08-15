@@ -12,7 +12,6 @@ public class Film {
     private String mThumbnail;
     private String mUserRating;
 
-
     // Film public constructor
     public Film(String mTitle, String mPlot, String mReleaseDate, String mThumbnail, String mUserRating) {
         this.mTitle = mTitle;

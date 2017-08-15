@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FilmPt1</string>
+    <string name="app_name">Popular Movies</string>
     <string name="no_internet">No Internet Connectivity</string>
     <string name="settings_menu_item">Settings</string>
     <string name="settings_title">Movies Settings</string>
@@ -24,6 +24,8 @@
     <string name="error_message">
         An error has occurred. Please try again.
     </string>
+    <string name="settings">Settings</string>
+    <string name="detail_activity">Movie Detail</string>
 
 
 </resources>

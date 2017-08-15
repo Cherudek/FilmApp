@@ -2,7 +2,6 @@ package com.example.gregorio.filmpt1;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +22,6 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
     private final FilmAdapterOnClickHandler mClickHandler;
     // A copy of the original mObjects array, initialized from and then used instead as soon as
     private List<Film> mMovieData = new ArrayList<>();
-    private int items;
-    private Context context;
-
-
 
     /**
      * Creates a FilmAdapter.
@@ -37,9 +32,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      */
     public FilmAdapter(FilmAdapterOnClickHandler clickHandler, int numberOfItems) {
         mClickHandler = clickHandler;
-        items = numberOfItems;
+        int items = numberOfItems;
     }
-
 
     @Override
     public FilmHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -53,21 +47,14 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
     @Override
     public void onBindViewHolder(FilmHolder holder, int position) {
-
-
         Film currentFilm = mMovieData.get(position);
-        Log.i(LOG_TAG, "TEST: Current Film is " + currentFilm);
-
         String filmPoster = currentFilm.getmThumbnail();
-        Log.i(LOG_TAG, "TEST: Poster url is " + filmPoster);
-
         Picasso.with(holder.img.getContext()).load("http://image.tmdb.org/t/p/w342/" + filmPoster).into(holder.img);
     }
 
     @Override
     public int getItemCount() {
         return mMovieData.size();
-
     }
 
     /**
@@ -112,9 +99,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            Log.i(LOG_TAG, "TEST: position ID is " + adapterPosition);
             Film film = mMovieData.get(adapterPosition);
-            Log.i(LOG_TAG, "TEST: film ID is " + film);
             String filmPoster = film.getmThumbnail();
             mClickHandler.onClick(filmPoster);
         }
