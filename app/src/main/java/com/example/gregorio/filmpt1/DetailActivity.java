@@ -25,7 +25,7 @@ public class DetailActivity extends AppCompatActivity {
             if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
                 String mImage = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
                 //mImageDisplay.setImageResource(Integer.parseInt(mImage));
-                Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w185/" + mImage).into(mImageDisplay);
+                Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + mImage).into(mImageDisplay);
 
             }
         }

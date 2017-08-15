@@ -61,7 +61,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
         String filmPoster = currentFilm.getmThumbnail();
         Log.i(LOG_TAG, "TEST: Poster url is " + filmPoster);
 
-        Picasso.with(holder.img.getContext()).load("http://image.tmdb.org/t/p/w185/" + filmPoster).into(holder.img);
+        Picasso.with(holder.img.getContext()).load("http://image.tmdb.org/t/p/w342/" + filmPoster).into(holder.img);
     }
 
     @Override
@@ -113,9 +113,10 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Log.i(LOG_TAG, "TEST: position ID is " + adapterPosition);
-            String film = String.valueOf(mMovieData.get(adapterPosition));
+            Film film = mMovieData.get(adapterPosition);
             Log.i(LOG_TAG, "TEST: film ID is " + film);
-            mClickHandler.onClick(String.valueOf(film));
+            String filmPoster = film.getmThumbnail();
+            mClickHandler.onClick(filmPoster);
         }
     }
 }
