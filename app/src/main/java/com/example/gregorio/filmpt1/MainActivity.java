@@ -124,10 +124,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         // Hide loading indicator because the data has been loaded
         mLoadingIndicator.setVisibility(View.GONE);
 
-        // Clear the adapter of previous movie data
-        //mFilmAdapter.clear();
-
-
         // If there is a valid list of {@link movie}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {

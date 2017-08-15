@@ -146,7 +146,7 @@ public class QueryUtils {
             return null;
         }
 
-        // Create an empty ArrayList that we can start adding newses to
+        // Create an empty ArrayList that we can start adding movies to
         ArrayList<Film> movies = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
