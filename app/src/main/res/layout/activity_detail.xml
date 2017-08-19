@@ -6,7 +6,12 @@
     android:padding="8dp"
     tools:context="com.example.gregorio.filmpt1.DetailActivity">
 
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -68,14 +73,12 @@
 
                 <TextView
                     android:id="@+id/user_rating"
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     tools:text="10" />
             </LinearLayout>
-
         </LinearLayout>
 
         <TextView
@@ -87,9 +90,6 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             tools:text="Plot" />
-
-
     </LinearLayout>
-
-
+    </ScrollView>
 </FrameLayout>

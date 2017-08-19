@@ -118,6 +118,15 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         Uri.Builder baseAndOrderBy = uriBuilder.appendEncodedPath(orderBy);
         Uri.Builder baseAndKey = baseAndOrderBy.appendQueryParameter(API_KEY_PARAM, apiKey);
 
+        switch (orderBy) {
+            case "popular":
+                getSupportActionBar().setTitle("Popular Movies");
+                break;
+            case "top_rated":
+                getSupportActionBar().setTitle("Top Rated Movies");
+                break;
+        }
+
         Log.i(LOG_TAG, "URI is: " + baseAndKey);
         return new FilmLoader(this, baseAndKey.toString());
 

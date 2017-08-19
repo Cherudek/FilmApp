@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
 
-            // update the onPreferenceChange() method in NewsPreferenceFragment to properly update
+            // update the onPreferenceChange() method in FilmPreferenceFragment to properly update
             // the summary of a ListPreference (using the label, instead of the key).
 
             if (preference instanceof ListPreference) {
