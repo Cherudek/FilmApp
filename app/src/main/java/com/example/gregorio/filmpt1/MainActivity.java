@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     private static final String apiKey = "21d79bfbb630e90306b78b394f98db52";
 
-    private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/popular?";
+    private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/";
+
 
     private RecyclerView recyclerView;
 
@@ -114,10 +115,13 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         Uri baseUri = Uri.parse(MOVIE_DB_API_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
-        Uri.Builder baseAndKey = uriBuilder.appendQueryParameter(API_KEY_PARAM, apiKey);
-        //uriBuilder.appendQueryParameter("orderby", orderBy);
+        Uri.Builder baseAndOrderBy = uriBuilder.appendEncodedPath(orderBy);
+        Uri.Builder baseAndKey = baseAndOrderBy.appendQueryParameter(API_KEY_PARAM, apiKey);
 
+        Log.i(LOG_TAG, "URI is: " + baseAndKey);
         return new FilmLoader(this, baseAndKey.toString());
+
+
     }
 
     @Override

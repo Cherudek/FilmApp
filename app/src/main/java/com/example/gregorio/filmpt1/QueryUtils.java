@@ -38,12 +38,12 @@ public class QueryUtils {
         // Create URL object
         URL url = createUrl(requestUrl);
 
-        //2 seconds delay added before fetching data to show progress bar
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        //2 seconds delay added before fetching data to show progress bar
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;

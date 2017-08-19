@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
     }
 
-    public static class NewsPreferenceFragment extends PreferenceFragment
+    public static class FilmPreferenceFragment extends PreferenceFragment
             implements Preference.OnPreferenceChangeListener {
 
         //override the onCreate() method to use the settings_main XML resource
@@ -39,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
 
-        //bindPreferenceSummaryToValue() helper method to set the current EarhtquakePreferenceFragment instance
+        //bindPreferenceSummaryToValue() helper method to set the current MoviesPreferenceFragment instance
         // as the listener on each preference.
         // We also read the current value of the preference stored in the SharedPreferences on the device,
         // and display that in the preference summary (so that the user can see the current value of the preference).
@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
             onPreferenceChange(preference, preferenceString);
         }
 
-        //NewsPreferenceFragment class should implement the OnPreferenceChangeListener interface,
+        //MoviesPreferenceFragment class should implement the OnPreferenceChangeListener interface,
         //and override the onPreferenceChange() method.
         // The code in this method takes care of updating the displayed preference summary
         // after it has been changed.
