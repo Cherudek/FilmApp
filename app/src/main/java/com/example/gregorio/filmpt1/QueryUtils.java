@@ -22,8 +22,6 @@ import static com.example.gregorio.filmpt1.FilmAdapter.LOG_TAG;
 
 public class QueryUtils {
 
-    //TODO Check Query Utils Against Network Utils
-
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
      * This class is only meant to hold static variables and methods, which can be accessed

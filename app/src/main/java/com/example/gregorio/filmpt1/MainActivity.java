@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     private static final int FILM_LOADER_ID = 1;
 
-    private static final String apiKey = "21d79bfbb630e90306b78b394f98db52";
+    private static final String API_KEY = BuildConfig.API_KEY;
 
     private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/";
 
@@ -108,16 +108,21 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         //construct a proper URI with their preference, and then create a new Loader for that URI.
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+
+        //Get the selected preference paramter from the SettingsACtivity and pass it on to the uri builder
         String orderBy = sharedPrefs.getString(
                 getString(R.string.settings_order_by_key),
                 getString(R.string.settings_order_by_default)
         );
 
+        //Uri builder to pass on the JSON query request
         Uri baseUri = Uri.parse(MOVIE_DB_API_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
         Uri.Builder baseAndOrderBy = uriBuilder.appendEncodedPath(orderBy);
-        Uri.Builder baseAndKey = baseAndOrderBy.appendQueryParameter(API_KEY_PARAM, apiKey);
+        Uri.Builder baseAndKey = baseAndOrderBy.appendQueryParameter(API_KEY_PARAM, API_KEY);
 
+        //Switch statement to update the Activity title depending on the Order By criteria:
+        //Sort by popular movies or by Top Rated
         switch (orderBy) {
             case "popular":
                 getSupportActionBar().setTitle("Popular Movies");
@@ -127,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
                 break;
         }
 
+        //returns a url string for the QueryUtils background task
         Log.i(LOG_TAG, "URI is: " + baseAndKey);
         return new FilmLoader(this, baseAndKey.toString());
 
@@ -178,6 +184,8 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
+
+    //putExtra information fields to pass on to the detail activity
     @Override
     public void onClick(String filmPoster, String FilmTitle, String releaseDate, String userRating, String filmPlot) {
         Context context = this;
@@ -192,11 +200,14 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         startActivity(intentToStartDetailActivity);
     }
 
+
+    //Settings menu set Up
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

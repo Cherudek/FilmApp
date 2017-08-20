@@ -29,7 +29,7 @@ public class FilmLoader extends AsyncTaskLoader<List<Film>> {
         mUrl = url;
     }
 
-    //Background Tread loaded
+    //Background Thread loaded
     @Override
     protected void onStartLoading() {
         forceLoad();
