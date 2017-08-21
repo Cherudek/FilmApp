@@ -20,7 +20,6 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
     }
 
-
     public static class FilmPreferenceFragment extends PreferenceFragment
             implements Preference.OnPreferenceChangeListener {
 
@@ -35,17 +34,11 @@ public class SettingsActivity extends AppCompatActivity {
             // which will set this fragment as the OnPreferenceChangeListener and update the summary so that
             //it displays the current value stored in SharedPreferences.
 
-
-        }
-
-        @Override
-        public void onResume() {
-            super.onResume();
-
             Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
             bindPreferenceSummaryToValue(orderBy);
 
         }
+
 
         //bindPreferenceSummaryToValue() helper method to set the current MoviesPreferenceFragment instance
         // as the listener on each preference.
@@ -75,7 +68,6 @@ public class SettingsActivity extends AppCompatActivity {
 
             // update the onPreferenceChange() method in FilmPreferenceFragment to properly update
             // the summary of a ListPreference (using the label, instead of the key).
-
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;
                 int prefIndex = listPreference.findIndexOfValue(stringValue);

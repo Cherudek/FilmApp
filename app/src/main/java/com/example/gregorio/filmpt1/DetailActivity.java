@@ -9,26 +9,31 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class DetailActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = DetailActivity.class.getSimpleName();
-    private ImageView mImageDisplay;
-    private TextView mTitle;
-    private TextView mReleaseDate;
-    private TextView mUserRating;
-    private TextView mPlot;
+
+    @BindView(R.id.title)
+    TextView mTitle;
+    @BindView(R.id.posterDisplay)
+    ImageView mImageDisplay;
+    @BindView(R.id.plot)
+    TextView mPlot;
+    @BindView(R.id.user_rating)
+    TextView mUserRating;
+    @BindView(R.id.release_date)
+    TextView mReleaseDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mImageDisplay = (ImageView) findViewById(R.id.posterDisplay);
-        mTitle = (TextView) findViewById(R.id.title);
-        mPlot = (TextView) findViewById(R.id.plot);
-        mReleaseDate = (TextView) findViewById(R.id.release_date);
-        mUserRating = (TextView) findViewById(R.id.user_rating);
+        ButterKnife.bind(this);
 
         Intent intentThatStartedThisActivity = getIntent();
 
@@ -39,12 +44,7 @@ public class DetailActivity extends AppCompatActivity {
         if (intentThatStartedThisActivity != null) {
             if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
 
-
                 String mImage = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
-
-                Log.i(LOG_TAG, "Film object Parcelable " + mImage);
-
-
                 Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + mImage).into(mImageDisplay);
 
                 String title = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_TITLE);
@@ -61,7 +61,5 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }
 

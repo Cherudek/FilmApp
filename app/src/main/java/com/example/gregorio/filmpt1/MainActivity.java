@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -64,7 +65,18 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         mFilmAdapter = new FilmAdapter(this, numberOFMovies);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        layoutManager = new GridLayoutManager(MainActivity.this, 2);
+
+        //Checks the phone orientation
+        int orientation = this.getResources().getConfiguration().orientation;
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            //code for portrait mode
+            layoutManager = new GridLayoutManager(MainActivity.this, 2);
+        } else {
+            //code for landscape mode
+            layoutManager = new GridLayoutManager(MainActivity.this, 4);
+        }
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mFilmAdapter);
@@ -94,10 +106,11 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         }
     }
 
+    //restart the loader to check whether we have a new sort-by value coming from the settings menu
     @Override
     protected void onResume() {
         super.onResume();
-
+        getLoaderManager().restartLoader(FILM_LOADER_ID, null, this);
 
     }
 
@@ -161,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         // Loader reset, so we can clear out our existing data.
         mFilmAdapter.clear();
     }
+
 
     /**
      * This method will make the View for the weather data visible and
