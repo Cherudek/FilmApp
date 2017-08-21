@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/";
 
-
     private RecyclerView recyclerView;
 
     private GridLayoutManager layoutManager;
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     private int numberOFMovies;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,19 +62,12 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         /* This TextView is used to display errors and will be hidden if there are no errors */
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        layoutManager = new GridLayoutManager(MainActivity.this, 2);
-
-        recyclerView.setHasFixedSize(true);
-
-        recyclerView.setLayoutManager(layoutManager);
-
         mFilmAdapter = new FilmAdapter(this, numberOFMovies);
-
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        layoutManager = new GridLayoutManager(MainActivity.this, 2);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mFilmAdapter);
-
         mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_spinner);
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
@@ -102,14 +95,20 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
+
+    @Override
     public Loader<List<Film>> onCreateLoader(int i, Bundle bundle) {
-        Log.v(LOG_TAG, "TEST: New Loader initialised for the url provided");
-        //onCreateLoader() method to read the user’s latest preferences for the minimum magnitude,
+
+        //onCreateLoader() method to read the user’s latest preferences for the sort criteria,
         //construct a proper URI with their preference, and then create a new Loader for that URI.
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-
-        //Get the selected preference paramter from the SettingsACtivity and pass it on to the uri builder
+        //Get the selected preference parameter from the SettingsActivity and pass it on to the uri builder
         String orderBy = sharedPrefs.getString(
                 getString(R.string.settings_order_by_key),
                 getString(R.string.settings_order_by_default)
@@ -190,7 +189,15 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     public void onClick(String filmPoster, String FilmTitle, String releaseDate, String userRating, String filmPlot) {
         Context context = this;
         Class destinationClass = DetailActivity.class;
+
+        Film dataToSend = new Film();
+
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
+
+        intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, dataToSend);
+
+        Log.i(LOG_TAG, "Data to send " + dataToSend);
+
         intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, filmPoster);
         intentToStartDetailActivity.putExtra(EXTRA_TEXT_TITLE, FilmTitle);
         intentToStartDetailActivity.putExtra(EXTRA_TEXT_RELEASE_DATE, releaseDate);
@@ -219,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
 
 

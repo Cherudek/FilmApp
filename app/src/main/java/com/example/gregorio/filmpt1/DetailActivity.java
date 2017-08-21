@@ -3,6 +3,7 @@ package com.example.gregorio.filmpt1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
     private ImageView mImageDisplay;
     private TextView mTitle;
     private TextView mReleaseDate;
@@ -30,16 +32,30 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intentThatStartedThisActivity = getIntent();
 
+        Film object = getIntent().getParcelableExtra(Intent.EXTRA_TEXT);
+
+        Log.i(LOG_TAG, "Film object Parcelable " + object);
+
         if (intentThatStartedThisActivity != null) {
             if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
+
+
                 String mImage = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
+
+                Log.i(LOG_TAG, "Film object Parcelable " + mImage);
+
+
                 Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + mImage).into(mImageDisplay);
+
                 String title = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_TITLE);
                 mTitle.setText(title);
+
                 String releaseDate = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_RELEASE_DATE);
                 mReleaseDate.setText(releaseDate);
+
                 String userRating = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_USER_RATING);
                 mUserRating.setText(userRating);
+
                 String plot = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_PLOT);
                 mPlot.setText(plot);
             }

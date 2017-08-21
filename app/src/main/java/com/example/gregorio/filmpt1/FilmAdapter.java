@@ -28,7 +28,6 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      *
      * @param clickHandler The on-click handler for this adapter. This single handler is called
      *                     when an item is clicked.
-     *
      */
     public FilmAdapter(FilmAdapterOnClickHandler clickHandler, int numberOfItems) {
         mClickHandler = clickHandler;
