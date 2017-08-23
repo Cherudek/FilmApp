@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         }
     }
 
+
     //restart the loader to check whether we have a new sort-by value coming from the settings menu
     @Override
     protected void onResume() {
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         getLoaderManager().restartLoader(FILM_LOADER_ID, null, this);
 
     }
+
 
     @Override
     public Loader<List<Film>> onCreateLoader(int i, Bundle bundle) {
@@ -150,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
 
     }
+
 
     @Override
     public void onLoadFinished(Loader<List<Film>> loader, List<Film> movies) {

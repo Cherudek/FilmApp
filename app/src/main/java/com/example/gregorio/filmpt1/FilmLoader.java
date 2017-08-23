@@ -18,6 +18,9 @@ public class FilmLoader extends AsyncTaskLoader<List<Film>> {
      */
     private String mUrl;
 
+    private List<Film> mFilm;
+
+
     /**
      * Constructs a new {@link FilmLoader}.
      *
@@ -29,10 +32,18 @@ public class FilmLoader extends AsyncTaskLoader<List<Film>> {
         mUrl = url;
     }
 
+    /*
+                 * If we already have cached results, just deliver them now. If we don't have any
+                 * cached results, force a load.
+                 */
     //Background Thread loaded
     @Override
     protected void onStartLoading() {
-        forceLoad();
+        if (mFilm != null) {
+            deliverResult(mFilm);
+        } else {
+            forceLoad();
+        }
     }
 
     /**
@@ -47,5 +58,12 @@ public class FilmLoader extends AsyncTaskLoader<List<Film>> {
         // Perform the network request, parse the response, and extract a list of MOVIES.
         List<Film> movies = QueryUtils.fetchMovieData(mUrl);
         return movies;
+    }
+
+    @Override
+    public void deliverResult(List<Film> data) {
+        mFilm = data;
+        super.deliverResult(data);
+
     }
 }
