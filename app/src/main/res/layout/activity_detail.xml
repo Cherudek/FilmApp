@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context="com.example.gregorio.filmpt1.DetailActivity">
+    tools:context="com.example.gregorio.popularMovies.DetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"

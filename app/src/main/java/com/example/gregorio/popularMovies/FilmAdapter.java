@@ -1,4 +1,4 @@
-package com.example.gregorio.filmpt1;
+package com.example.gregorio.popularMovies;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

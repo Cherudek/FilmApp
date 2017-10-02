@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gregorio.filmpt1">
+    package="com.example.gregorio.popularMovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,27 +11,28 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.gregorio.popularMovies.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailActivity"
+        <activity
+            android:name="com.example.gregorio.popularMovies.DetailActivity"
             android:label="@string/detail_activity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName="com.example.gregorio.popularMovies.MainActivity"></activity>
 
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" />
+            android:value="com.example.gregorio.popularMovies.MainActivity" />
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.example.gregorio.popularMovies.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.example.gregorio.popularMovies.MainActivity">
         </activity>
         <meta-data android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" />
+            android:value="com.example.gregorio.popularMovies.MainActivity" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.gregorio.filmpt1;
+package com.example.gregorio.popularMovies;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -49,11 +49,8 @@ public class SettingsActivity extends AppCompatActivity {
         private void bindPreferenceSummaryToValue(Preference preference) {
 
             preference.setOnPreferenceChangeListener(this);
-
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-
             String preferenceString = preferences.getString(preference.getKey(), "");
-
             onPreferenceChange(preference, preferenceString);
         }
 

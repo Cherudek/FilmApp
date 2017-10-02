@@ -1,4 +1,4 @@
-package com.example.gregorio.filmpt1;
+package com.example.gregorio.popularMovies;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,7 +17,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-import static com.example.gregorio.filmpt1.FilmAdapter.LOG_TAG;
+import static com.example.gregorio.popularMovies.FilmAdapter.LOG_TAG;
 
 
 public class QueryUtils {

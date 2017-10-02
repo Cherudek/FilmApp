@@ -1,4 +1,4 @@
-package com.example.gregorio.filmpt1;
+package com.example.gregorio.popularMovies;
 
 
 import android.content.AsyncTaskLoader;
