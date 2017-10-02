@@ -21,14 +21,16 @@ public class Film implements Parcelable {
     };
     // Fields
     private String mTitle;
+    private String mId;
     private String mPlot;
     private String mReleaseDate;
     private String mThumbnail;
     private String mUserRating;
 
     // Film public constructor
-    public Film(String mTitle, String mPlot, String mReleaseDate, String mThumbnail, String mUserRating) {
+    public Film(String mTitle, String mId, String mPlot, String mReleaseDate, String mThumbnail, String mUserRating) {
         this.mTitle = mTitle;
+        this.mId = mId;
         this.mPlot = mPlot;
         this.mReleaseDate = mReleaseDate;
         this.mThumbnail = mThumbnail;
@@ -40,6 +42,7 @@ public class Film implements Parcelable {
     // private so that only the `CREATOR` field can access.
     private Film(Parcel in) {
         mTitle = in.readString();
+        mId = in.readString();
         mPlot = in.readString();
         mReleaseDate = in.readString();
         mThumbnail = in.readString();
@@ -53,6 +56,10 @@ public class Film implements Parcelable {
     //Getter Methods
     public String getmTitle() {
         return mTitle;
+    }
+
+    public String getmId() {
+        return mId;
     }
 
     public String getmPlot() {
@@ -79,6 +86,7 @@ public class Film implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(mTitle);
+        out.writeString(mId);
         out.writeString(mPlot);
         out.writeString(mReleaseDate);
         out.writeString(mThumbnail);

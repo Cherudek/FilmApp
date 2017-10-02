@@ -224,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         startActivity(intentToStartDetailActivity);
     }
 
-
     //Settings menu set Up
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -244,25 +243,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         return super.onOptionsItemSelected(item);
     }
 
-//    private void setsharedPreference (FilmAdapter mFilmAdapter, SharedPreferences sharedPreferences, String key){
-//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        recyclerView.setAdapter(mFilmAdapter);
-//        key = sharedPreferences.getString(toString(R.string.settings_order_by_key));
-//    }
-//
-//    @Override
-//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        if(key.equals(getString(R.string.settings_order_by_key))){
-//            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-//            recyclerView
-//        }
-//    }
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
-//    }
 }
 
 

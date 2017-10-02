@@ -173,6 +173,14 @@ public class QueryUtils {
                     title = "N.A";
                 }
 
+                // Extract the value for the key "id"
+                String id;
+                if (currentMovies.has("id")) {
+                    id = currentMovies.getString("id");
+                } else {
+                    id = "N.A";
+                }
+
                 // Extract the value for the key "release_date"
                 String releaseDate;
                 if (currentMovies.has("release_date")) {
@@ -207,7 +215,7 @@ public class QueryUtils {
 
                 // Create a new {@link Film} object with the title, section, time,
                 // and url from the JSON response.
-                Film movie = new Film(title, overview, releaseDate, posterPath, rating);
+                Film movie = new Film(title, id, overview, releaseDate, posterPath, rating);
 
                 // Add the new {@link Film} to the list of newses.
                 movies.add(movie);
