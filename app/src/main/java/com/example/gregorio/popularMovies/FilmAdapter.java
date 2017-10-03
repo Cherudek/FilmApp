@@ -107,9 +107,6 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
             String filmPoster = film.getmThumbnail();
             String filmRating = film.getmUserRating();
 
-
-
-            String userRating = film.getmUserRating();
             mClickHandler.onClick(filmTitle, filmId, plot, releaseDate, filmPoster, filmRating);
         }
     }

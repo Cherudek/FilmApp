@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -14,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,16 +26,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Film>> {
 
     final static String API_KEY_PARAM = "api_key";
-
-    final static String EXTRA_TEXT_ID = "com.example.gregorio.filmpt1.EXTRA_TEXT_ID";
-
-    final static String EXTRA_TEXT_TITLE = "com.example.gregorio.filmpt1.EXTRA_TEXT_TITLE";
-
-    final static String EXTRA_TEXT_RELEASE_DATE = "com.example.gregorio.filmpt1.EXTRA_TEXT_RELEASE_DATE";
-
-    final static String EXTRA_TEXT_USER_RATING = "com.example.gregorio.filmpt1.EXTRA_TEXT_USER_RATING";
-
-    final static String EXTRA_TEXT_PLOT = "com.example.gregorio.filmpt1.EXTRA_TEXT_PLOT";
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -68,16 +58,20 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         mFilmAdapter = new FilmAdapter(this, numberOFMovies);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        //Checks the phone orientation
-        int orientation = this.getResources().getConfiguration().orientation;
+        layoutManager = new GridLayoutManager(this, numberOfColumns());
 
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            //code for portrait mode
-            layoutManager = new GridLayoutManager(MainActivity.this, 2);
-        } else {
-            //code for landscape mode
-            layoutManager = new GridLayoutManager(MainActivity.this, 4);
-        }
+
+//
+//        //Checks the phone orientation
+//        int orientation = this.getResources().getConfiguration().orientation;
+//
+//        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            //code for portrait mode
+//            layoutManager = new GridLayoutManager(MainActivity.this, 2);
+//        } else {
+//            //code for landscape mode
+//            layoutManager = new GridLayoutManager(MainActivity.this, 4);
+//        }
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -106,7 +100,25 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
             // Update empty state with no connection error message
             mErrorMessageDisplay.setText(R.string.no_internet);
         }
+
+
     }
+
+    // this method dynamically calculate the number of columns and
+    // the layout would adapt to the screen size and orientation
+
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
+    }
+
+
 
 
     //restart the loader to check whether we have a new sort-by value coming from the settings menu
@@ -202,15 +214,14 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-
-
-    //putExtra information fields to pass on to the detail activity
+    //putExtra information fields in a parcel film object to pass on to the detail activity
     @Override
     public void onClick(String FilmTitle, String id, String filmPlot, String releaseDate, String poster, String rating) {
 
         Context context = this;
         Class destinationClass = DetailActivity.class;
 
+        //Parcel data to film object to send data to DetailActivity
         Film dataToSend = new Film();
 
         dataToSend.setmTitle(FilmTitle);
@@ -221,17 +232,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         dataToSend.setmUserRating(rating);
 
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
-
         intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, dataToSend);
-
-
-        Log.i(LOG_TAG, "Data to send " + dataToSend);
-
-//        intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, filmPoster);
-//        intentToStartDetailActivity.putExtra(EXTRA_TEXT_TITLE, FilmTitle);
-//        intentToStartDetailActivity.putExtra(EXTRA_TEXT_RELEASE_DATE, releaseDate);
-//        intentToStartDetailActivity.putExtra(EXTRA_TEXT_USER_RATING, userRating);
-//        intentToStartDetailActivity.putExtra(EXTRA_TEXT_PLOT, filmPlot);
 
         startActivity(intentToStartDetailActivity);
     }
