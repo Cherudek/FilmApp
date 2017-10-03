@@ -81,7 +81,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      * The interface that receives onClick messages.
      */
     public interface FilmAdapterOnClickHandler {
-        void onClick(String filmPoster, String filmTitle, String releaseDate, String filmRating, String filmPlot);
+        void onClick(String filmTitle, String id, String filmPlot, String release, String poster, String Rating);
     }
 
     // The Film Holder optimizes the calling and binding of views from the adaptor to the UI
@@ -99,12 +99,18 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Film film = mMovieData.get(adapterPosition);
-            String filmPoster = film.getmThumbnail();
+
             String filmTitle = film.getmTitle();
-            String releaseDate = film.getmReleaseDate();
-            String userRating = film.getmUserRating();
+            String filmId = film.getmId();
             String plot = film.getmPlot();
-            mClickHandler.onClick(filmPoster, filmTitle, releaseDate, userRating, plot);
+            String releaseDate = film.getmReleaseDate();
+            String filmPoster = film.getmThumbnail();
+            String filmRating = film.getmUserRating();
+
+
+
+            String userRating = film.getmUserRating();
+            mClickHandler.onClick(filmTitle, filmId, plot, releaseDate, filmPoster, filmRating);
         }
     }
 }

@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     final static String API_KEY_PARAM = "api_key";
 
+    final static String EXTRA_TEXT_ID = "com.example.gregorio.filmpt1.EXTRA_TEXT_ID";
+
     final static String EXTRA_TEXT_TITLE = "com.example.gregorio.filmpt1.EXTRA_TEXT_TITLE";
 
     final static String EXTRA_TEXT_RELEASE_DATE = "com.example.gregorio.filmpt1.EXTRA_TEXT_RELEASE_DATE";
@@ -201,25 +203,35 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     }
 
 
+
     //putExtra information fields to pass on to the detail activity
     @Override
-    public void onClick(String filmPoster, String FilmTitle, String releaseDate, String userRating, String filmPlot) {
+    public void onClick(String FilmTitle, String id, String filmPlot, String releaseDate, String poster, String rating) {
+
         Context context = this;
         Class destinationClass = DetailActivity.class;
 
         Film dataToSend = new Film();
 
+        dataToSend.setmTitle(FilmTitle);
+        dataToSend.setmId(id);
+        dataToSend.setmPlot(filmPlot);
+        dataToSend.setmReleaseDate(releaseDate);
+        dataToSend.setmThumbnail(poster);
+        dataToSend.setmUserRating(rating);
+
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
 
         intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, dataToSend);
 
+
         Log.i(LOG_TAG, "Data to send " + dataToSend);
 
-        intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, filmPoster);
-        intentToStartDetailActivity.putExtra(EXTRA_TEXT_TITLE, FilmTitle);
-        intentToStartDetailActivity.putExtra(EXTRA_TEXT_RELEASE_DATE, releaseDate);
-        intentToStartDetailActivity.putExtra(EXTRA_TEXT_USER_RATING, userRating);
-        intentToStartDetailActivity.putExtra(EXTRA_TEXT_PLOT, filmPlot);
+//        intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, filmPoster);
+//        intentToStartDetailActivity.putExtra(EXTRA_TEXT_TITLE, FilmTitle);
+//        intentToStartDetailActivity.putExtra(EXTRA_TEXT_RELEASE_DATE, releaseDate);
+//        intentToStartDetailActivity.putExtra(EXTRA_TEXT_USER_RATING, userRating);
+//        intentToStartDetailActivity.putExtra(EXTRA_TEXT_PLOT, filmPlot);
 
         startActivity(intentToStartDetailActivity);
     }

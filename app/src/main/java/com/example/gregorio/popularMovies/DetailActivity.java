@@ -3,7 +3,6 @@ package com.example.gregorio.popularMovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,31 +34,40 @@ public class DetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        Intent intentThatStartedThisActivity = getIntent();
-
         Film object = getIntent().getParcelableExtra(Intent.EXTRA_TEXT);
 
-        Log.i(LOG_TAG, "Film object Parcelable " + object);
+        String filmTitle = object.getmTitle();
+        String filmId = object.getmId();
+        String plot = object.getmPlot();
+        String releaseDate = object.getmReleaseDate();
+        String poster = object.getmThumbnail();
+        String rating = object.getmUserRating();
 
-        if (intentThatStartedThisActivity != null) {
-            if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
+        mTitle.setText(filmTitle + " " + filmId);
+        mPlot.setText(plot);
+        mReleaseDate.setText(releaseDate);
+        Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(mImageDisplay);
+        mUserRating.setText(rating);
 
-                String mImage = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
-                Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + mImage).into(mImageDisplay);
-
-                String title = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_TITLE);
-                mTitle.setText(title);
-
-                String releaseDate = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_RELEASE_DATE);
-                mReleaseDate.setText(releaseDate);
-
-                String userRating = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_USER_RATING);
-                mUserRating.setText(userRating);
-
-                String plot = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_PLOT);
-                mPlot.setText(plot);
-            }
-        }
+//        if (intentThatStartedThisActivity != null) {
+//            if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
+//
+//                String mImage = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
+//                Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + mImage).into(mImageDisplay);
+//
+//                String title = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_TITLE);
+//                mTitle.setText(title);
+//
+//                String releaseDate = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_RELEASE_DATE);
+//                mReleaseDate.setText(releaseDate);
+//
+//                String userRating = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_USER_RATING);
+//                mUserRating.setText(userRating);
+//
+//                String plot = intentThatStartedThisActivity.getStringExtra(MainActivity.EXTRA_TEXT_PLOT);
+//                mPlot.setText(plot);
+//            }
+//        }
     }
 }
 

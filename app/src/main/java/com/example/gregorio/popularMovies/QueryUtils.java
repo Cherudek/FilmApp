@@ -173,7 +173,7 @@ public class QueryUtils {
                     title = "N.A";
                 }
 
-                // Extract the value for the key "id"
+                // Extract the value for the key film "id"
                 String id;
                 if (currentMovies.has("id")) {
                     id = currentMovies.getString("id");
