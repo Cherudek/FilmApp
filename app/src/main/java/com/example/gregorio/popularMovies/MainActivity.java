@@ -60,19 +60,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         layoutManager = new GridLayoutManager(this, numberOfColumns());
 
-
-//
-//        //Checks the phone orientation
-//        int orientation = this.getResources().getConfiguration().orientation;
-//
-//        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-//            //code for portrait mode
-//            layoutManager = new GridLayoutManager(MainActivity.this, 2);
-//        } else {
-//            //code for landscape mode
-//            layoutManager = new GridLayoutManager(MainActivity.this, 4);
-//        }
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mFilmAdapter);

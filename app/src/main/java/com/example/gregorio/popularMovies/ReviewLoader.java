@@ -59,7 +59,7 @@ public class ReviewLoader extends AsyncTaskLoader<List<Review>> {
             return null;
         }
 
-        // List<Review> reviews = QueryReviewUtils.class.
+        List<Review> reviews = QueryReviewUtils.fetchReviewData(mUrl);
         return null;
     }
 
