@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
                 break;
         }
 
-        //returns a url string for the QueryUtils background task
+        //returns a url string for the QueryMovieUtils background task
         Log.i(LOG_TAG, "URI is: " + baseAndKey);
         return new FilmLoader(this, baseAndKey.toString());
 

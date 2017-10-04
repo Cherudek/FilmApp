@@ -56,7 +56,7 @@ public class FilmLoader extends AsyncTaskLoader<List<Film>> {
         }
 
         // Perform the network request, parse the response, and extract a list of MOVIES.
-        List<Film> movies = QueryUtils.fetchMovieData(mUrl);
+        List<Film> movies = QueryMovieUtils.fetchMovieData(mUrl);
         return movies;
     }
 

@@ -20,14 +20,14 @@ import java.util.ArrayList;
 import static com.example.gregorio.popularMovies.FilmAdapter.LOG_TAG;
 
 
-public class QueryUtils {
+public class QueryMovieUtils {
 
     /**
-     * Create a private constructor because no one should ever create a {@link QueryUtils} object.
+     * Create a private constructor because no one should ever create a {@link QueryMovieUtils} object.
      * This class is only meant to hold static variables and methods, which can be accessed
-     * directly from the class name QueryUtils (and an object instance of QueryUtils is not needed).
+     * directly from the class name QueryMovieUtils (and an object instance of QueryMovieUtils is not needed).
      */
-    private QueryUtils() {
+    private QueryMovieUtils() {
     }
 
     public static ArrayList<Film> fetchMovieData(String requestUrl) {
@@ -226,7 +226,7 @@ public class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the MovieDB JSON results", e);
+            Log.e("QueryMovieUtils", "Problem parsing the MovieDB JSON results", e);
         }
 
         // Return the list of films
