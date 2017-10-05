@@ -17,11 +17,13 @@ import java.util.List;
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
     public static final String LOG_TAG = FilmAdapter.class.getName();
+
     /*
- * An on-click handler that we've defined to make it easy for an Activity to interface with
- * our RecyclerView
- */
+     * An on-click handler that we've defined to make it easy for an Activity to interface with
+     * our RecyclerView
+    */
     private final FilmAdapterOnClickHandler mClickHandler;
+
     // A copy of the original mObjects array, initialized from and then used instead as soon as
     private List<Film> mMovieData = new ArrayList<>();
 
@@ -100,6 +102,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
         @Override
         public void onClick(View v) {
+
             int adapterPosition = getAdapterPosition();
             Film film = mMovieData.get(adapterPosition);
 
