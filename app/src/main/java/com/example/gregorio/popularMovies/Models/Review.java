@@ -1,4 +1,4 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.Models;
 
 /**
  * Created by Gregorio on 03/10/2017.

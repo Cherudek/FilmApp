@@ -1,7 +1,9 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.QueryUtils;
 
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.example.gregorio.popularMovies.Models.Film;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,25 +19,21 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import static com.example.gregorio.popularMovies.Adapters.FilmAdapter.LOG_TAG;
 
-/**
- * Created by Gregorio on 03/10/2017.
- */
 
-public class QueryReviewUtils {
-
-    private static final String LOG_TAG = QueryReviewUtils.class.getSimpleName();
+public class QueryMovieUtils {
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryMovieUtils} object.
      * This class is only meant to hold static variables and methods, which can be accessed
      * directly from the class name QueryMovieUtils (and an object instance of QueryMovieUtils is not needed).
      */
-    private QueryReviewUtils() {
+    private QueryMovieUtils() {
     }
 
-    public static ArrayList<Review> fetchReviewData(String requestUrl) {
-        Log.v(LOG_TAG, "TEST: Fetch Review Data");
+    public static ArrayList<Film> fetchMovieData(String requestUrl) {
+        Log.v(LOG_TAG, "TEST: Fetch Film Data");
 
         // Create URL object
         URL url = createUrl(requestUrl);
@@ -56,10 +54,10 @@ public class QueryReviewUtils {
         }
 
         // Extract relevant fields from the JSON response and create a list of {@link Film}s
-        ArrayList<Review> reviews = extractResultsFromJson(jsonResponse);
+        ArrayList<Film> movies = extractResultsFromJson(jsonResponse);
 
         // Return the list of {@link Film}s
-        return reviews;
+        return movies;
     }
 
 
@@ -142,14 +140,14 @@ public class QueryReviewUtils {
      * Return a list of {@link Film} objects that has been built up from
      * parsing the given JSON response.
      */
-    private static ArrayList<Review> extractResultsFromJson(String reviewsJSON) {
+    private static ArrayList<Film> extractResultsFromJson(String moviesJSON) {
         // If the JSON string is empty or null, then return early.
-        if (TextUtils.isEmpty(reviewsJSON)) {
+        if (TextUtils.isEmpty(moviesJSON)) {
             return null;
         }
 
         // Create an empty ArrayList that we can start adding movies to
-        ArrayList<Review> reviews = new ArrayList<>();
+        ArrayList<Film> movies = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
@@ -157,41 +155,74 @@ public class QueryReviewUtils {
         try {
 
             // Create a JSONObject from the JSON response string
-            JSONObject baseJsonResponse = new JSONObject(reviewsJSON);
+            JSONObject baseJsonResponse = new JSONObject(moviesJSON);
 
             //Extract the JASONArray associated with the Key called results
             //which represents a list of results.
-            JSONArray reviewsArray = baseJsonResponse.getJSONArray("results");
+            JSONArray filmArray = baseJsonResponse.getJSONArray("results");
 
             // For each movie item in the Array, create an {@link Film} object
-            for (int i = 0; i < reviewsArray.length(); i++) {
+            for (int i = 0; i < filmArray.length(); i++) {
 
                 // Get a single news at position (i) within the list of newses
-                JSONObject currentReviews = reviewsArray.getJSONObject(i);
+                JSONObject currentMovies = filmArray.getJSONObject(i);
 
-                // Extract the value for the key "author"
-                String author;
-                if (currentReviews.has("author")) {
-                    author = currentReviews.getString("author");
+                // Extract the value for the key "title"
+                String title;
+                if (currentMovies.has("title")) {
+                    title = currentMovies.getString("title");
                 } else {
-                    author = "N.A";
+                    title = "N.A";
                 }
 
-                // Extract the value for the key film "content"
-                String review;
-                if (currentReviews.has("content")) {
-                    review = currentReviews.getString("content");
+                // Extract the value for the key film "id"
+                String id;
+                if (currentMovies.has("id")) {
+                    id = currentMovies.getString("id");
                 } else {
-                    review = "N.A";
+                    id = "N.A";
                 }
 
+                // Extract the value for the key "release_date"
+                String releaseDate;
+                if (currentMovies.has("release_date")) {
+                    releaseDate = currentMovies.getString("release_date");
+                } else {
+                    releaseDate = "N.A.";
+                }
 
-                // Create a new {@link Film} object with the author, review
+                // Extract the value for the key "poster_path"
+                String posterPath;
+                if (currentMovies.has("poster_path")) {
+                    posterPath = currentMovies.getString("poster_path");
+                } else {
+                    posterPath = "N.A.";
+                }
+
+                // Extract the value for the key "overview"
+                String overview;
+                if (currentMovies.has("overview")) {
+                    overview = currentMovies.getString("overview");
+                } else {
+                    overview = "N.A.";
+                }
+
+                // Extract the value for the key "rating"
+                String rating;
+                if (currentMovies.has("vote_average")) {
+                    rating = currentMovies.getString("vote_average");
+                } else {
+                    rating = "N.A.";
+                }
+
+                Log.i(LOG_TAG, "film title =" + title);
+
+                // Create a new {@link Film} object with the title, section, time,
                 // and url from the JSON response.
-                Review reviewObject = new Review(author, review);
+                Film movie = new Film(title, id, overview, releaseDate, posterPath, rating);
 
                 // Add the new {@link Film} to the list of newses.
-                reviews.add(reviewObject);
+                movies.add(movie);
 
             }
 
@@ -199,15 +230,11 @@ public class QueryReviewUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e(LOG_TAG, "Problem parsing the MovieDB JSON results", e);
+            Log.e("QueryMovieUtils", "Problem parsing the MovieDB JSON results", e);
         }
 
         // Return the list of films
-        return reviews;
+        return movies;
     }
-
-
-
-
 
 }

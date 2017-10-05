@@ -17,6 +17,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.gregorio.popularMovies.Adapters.ReviewAdapter;
+import com.example.gregorio.popularMovies.Loaders.ReviewLoader;
+import com.example.gregorio.popularMovies.Models.Film;
+import com.example.gregorio.popularMovies.Models.Review;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -27,15 +31,14 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Review>> {
 
-
     final static String API_KEY_PARAM = "api_key";
     final static String API_KEY = "21d79bfbb630e90306b78b394f98db52";
-    //  Create a private static final int called NUM_LIST_ITEMS and set it equal to 100
-    private static final int NUM_LIST_ITEMS = 100;
+
     private static final String LOG_TAG = DetailActivity.class.getSimpleName();
     private static final int FILM_REVIEWS_LOADER_ID = 2;
     private static final String FILM_API_REQUEST_URL = "https://api.themoviedb.org/3/movie";
     private static final String FILM_REVIEWS = "reviews";
+
     @BindView(R.id.title)
     TextView mTitle;
     @BindView(R.id.posterDisplay)
@@ -48,15 +51,16 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     TextView mReleaseDate;
     @BindView(R.id.rv_review)
     RecyclerView rvListView;
-
-
+    @BindView(R.id.detail__error_message_display)
+    TextView mErrorMessageDisplay;
+    @BindView(R.id.detail_loading_spinner)
+    ProgressBar mLoadingIndicator;
 
     private String filmID;
 
     private LinearLayoutManager reviewsLayoutManager;
     private ReviewAdapter mReviewsAdapter;
-    private TextView mErrorMessageDisplay;
-    private ProgressBar mLoadingIndicator;
+
     private int numberOfReviews;
 
     @Override
@@ -107,7 +111,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         /*
          * The GreenAdapter is responsible for displaying each item in the list.
          */
-        mReviewsAdapter = new ReviewAdapter(NUM_LIST_ITEMS);
+        mReviewsAdapter = new ReviewAdapter(numberOfReviews);
 
         //Set the ReviewAdapter you created on rvListView
         rvListView.setAdapter(mReviewsAdapter);
@@ -126,6 +130,12 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
             getSupportLoaderManager().initLoader(FILM_REVIEWS_LOADER_ID, null, this);
+        } else {
+            // Otherwise, display error
+            // First, hide loading indicator so error message will be visible
+            mLoadingIndicator.setVisibility(View.GONE);
+            // Update empty state with no connection error message
+            mErrorMessageDisplay.setText(R.string.no_internet);
         }
 
     }
@@ -156,6 +166,8 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<List<Review>> loader, List<Review> data) {
 
+        mLoadingIndicator.setVisibility(View.GONE);
+
         // If there is a valid list of {@link movie}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (data != null && !data.isEmpty()) {
@@ -184,7 +196,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
      */
     private void showMovieDataView() {
         /* First, make sure the error is invisible */
-        // mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         /* Then, make sure the weather data is visible */
         rvListView.setVisibility(View.VISIBLE);
     }
@@ -193,7 +205,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         /* First, hide the currently visible data */
         rvListView.setVisibility(View.INVISIBLE);
         /* Then, show the error */
-        // mErrorMessageDisplay.setVisibility(View.VISIBLE);
+        mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.MainActivity;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -20,6 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.gregorio.popularMovies.Adapters.FilmAdapter;
+import com.example.gregorio.popularMovies.BuildConfig;
+import com.example.gregorio.popularMovies.DetailActivity;
+import com.example.gregorio.popularMovies.Loaders.FilmLoader;
+import com.example.gregorio.popularMovies.Models.Film;
+import com.example.gregorio.popularMovies.R;
+import com.example.gregorio.popularMovies.SettingsActivity;
 
 import java.util.List;
 

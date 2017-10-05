@@ -1,4 +1,4 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.gregorio.popularMovies.Models.Film;
+import com.example.gregorio.popularMovies.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
         int layoutIdForGridItem = R.layout.grid_layout;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
+
         View view = inflater.inflate(layoutIdForGridItem, viewGroup, shouldAttachToParentImmediately);
         return new FilmHolder(view);
     }

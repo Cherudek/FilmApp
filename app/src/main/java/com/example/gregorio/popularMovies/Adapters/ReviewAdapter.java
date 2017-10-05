@@ -1,4 +1,4 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.gregorio.popularMovies.Models.Review;
+import com.example.gregorio.popularMovies.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,12 +75,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     @Override
     public void onBindViewHolder(ReviewViewHolder holder, int position) {
         Log.d(TAG, "#" + position);
+
         Review currentReview = mReviewData.get(position);
         String reviewAuthor = currentReview.getmAuthor();
         String review = currentReview.getmReview();
 
-        holder.listItemReview.setText(reviewAuthor);
-        holder.listItemAuthor.setText(review);
+        holder.listItemReview.setText(review);
+        holder.listItemAuthor.setText(reviewAuthor);
+
+        holder.bind(review);
+        holder.bind(reviewAuthor);
     }
 
     /**
@@ -88,7 +95,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
      */
     @Override
     public int getItemCount() {
-        return mNumberItems;
+        return mReviewData.size();
     }
 
     /**
@@ -142,19 +149,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             listItemReview = (TextView) itemView.findViewById(R.id.review);
         }
 
-        // COMPLETED (16) Within the ReviewViewHolder class, create a void method called bind that accepts an int parameter called listIndex
+        // COMPLETED (16) Within the ReviewViewHolder class, create a void method called bind
 
         /**
          * A method we wrote for convenience. This method will take an integer as input and
          * use that integer to display the appropriate text within a list item.
          *
-         * @param listIndex Position of the item in the list
+         * @param data Position of the item in the list
          */
-        void bind(int listIndex) {
-            // COMPLETED (17) Within bind, set the text of listItemNumberView to the listIndex
-            // COMPLETED (18) Be careful to get the String representation of listIndex, as using setText with an int does something different
-            listItemAuthor.setText(String.valueOf(listIndex));
-            listItemReview.setText(String.valueOf(listIndex));
+        void bind(String data) {
+
         }
     }
 }

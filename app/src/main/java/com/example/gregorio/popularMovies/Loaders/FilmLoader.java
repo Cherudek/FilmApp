@@ -1,8 +1,11 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.Loaders;
 
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+
+import com.example.gregorio.popularMovies.Models.Film;
+import com.example.gregorio.popularMovies.QueryUtils.QueryMovieUtils;
 
 import java.util.List;
 

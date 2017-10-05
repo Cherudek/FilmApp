@@ -1,7 +1,10 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.Loaders;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
+
+import com.example.gregorio.popularMovies.Models.Review;
+import com.example.gregorio.popularMovies.QueryUtils.QueryReviewUtils;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class ReviewLoader extends AsyncTaskLoader<List<Review>> {
      * Query URL
      */
     private String mUrl;
+
 
     private List<Review> mReview;
 
@@ -60,7 +64,7 @@ public class ReviewLoader extends AsyncTaskLoader<List<Review>> {
         }
 
         List<Review> reviews = QueryReviewUtils.fetchReviewData(mUrl);
-        return null;
+        return reviews;
     }
 
     @Override

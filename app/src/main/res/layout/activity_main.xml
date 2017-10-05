@@ -10,7 +10,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.example.gregorio.popularMovies.MainActivity"></android.support.v7.widget.RecyclerView>
+        tools:context="com.example.gregorio.popularMovies.MainActivity.MainActivity"></android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="wrap_content"

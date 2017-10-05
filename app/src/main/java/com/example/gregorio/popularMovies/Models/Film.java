@@ -1,4 +1,4 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.Models;
 
 
 // A Custom Film Class to create Film Objects
