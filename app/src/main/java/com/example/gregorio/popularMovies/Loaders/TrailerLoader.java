@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.gregorio.popularMovies.Models.Trailer;
-import com.example.gregorio.popularMovies.QueryUtils.QueryReviewUtils;
+import com.example.gregorio.popularMovies.QueryUtils.QueryTrailerUtils;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class TrailerLoader extends AsyncTaskLoader<List<Trailer>> {
     @Override
     public List<Trailer> loadInBackground() {
 
-        List<Trailer> trailers = QueryReviewUtils.fetchTrailerData(mUrl);
+        List<Trailer> trailers = QueryTrailerUtils.fetchTrailerData(mUrl);
         return trailers;
     }
 
