@@ -1,4 +1,4 @@
-package com.example.gregorio.popularMovies;
+package com.example.gregorio.popularMovies.Data;
 
 
 import android.net.Uri;
@@ -26,7 +26,7 @@ public class FilmContract {
  */
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-        /*
+    /*
      * Possible paths that can be appended to BASE_CONTENT_URI to form valid URI's that Popular Movies
      * can handle. For instance,
      *
@@ -35,7 +35,7 @@ public class FilmContract {
      *
      * is a valid path for looking at favourite films database.
      *
-     *      content://com.example.android.sunshine/givemeroot/
+     *      content://com.example.android.popularMovies/givemeroot/
      *
      * will fail, as the ContentProvider hasn't been given any information on what to do with
      * "givemeroot". At least, let's hope not. Don't be that dev, reader. Don't be that dev.
@@ -54,6 +54,12 @@ public class FilmContract {
 
         /* Used internally as the name of our favourite films table. */
         public static final String TABLE_NAME = "favouriteFilms";
+
+        //Column ID <P>Type: INTEGER</P>
+        public static final String _ID = BaseColumns._ID;
+
+        /* Film id as returned by API, used to identify the id to be used */
+        public static final String COLUMN_FILM_ID = "id";
 
         /* Film title as returned by API, used to identify the title to be used */
         public static final String COLUMN_TITLE = "title";

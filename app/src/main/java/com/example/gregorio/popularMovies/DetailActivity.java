@@ -1,6 +1,9 @@
 package com.example.gregorio.popularMovies;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,12 +16,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gregorio.popularMovies.Adapters.ReviewAdapter;
 import com.example.gregorio.popularMovies.Adapters.TrailerAdapter;
+import com.example.gregorio.popularMovies.Data.FilmContract;
 import com.example.gregorio.popularMovies.Loaders.ReviewLoader;
 import com.example.gregorio.popularMovies.Loaders.TrailerLoader;
 import com.example.gregorio.popularMovies.Models.Film;
@@ -43,8 +49,12 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private static final String FILM_API_REQUEST_URL = "https://api.themoviedb.org/3/movie";
     private static final String FILM_REVIEWS = "reviews";
     private static final String FILM_TRAILERS = "trailers";
-
-
+    // This state is when the film is not a favourite and clicking the button will therefore
+    // insert the film to the favourites database
+    private final int STATE_NOT_FAVOURITE = 0;
+    // This state is when the film is a favourite and clicking the button will therefore
+    // delete the film from our database
+    private final int STATE_FAVOURITE = 1;
     @BindView(R.id.title)
     TextView mTitle;
     @BindView(R.id.posterDisplay)
@@ -55,24 +65,34 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     TextView mUserRating;
     @BindView(R.id.release_date)
     TextView mReleaseDate;
-
+    @BindView(R.id.add_to_favourites)
+    Button mAddToFavourites;
     @BindView(R.id.rv_review)
     RecyclerView rvListView;
-
     @BindView(R.id.rv_trailers)
     RecyclerView rvTrailers;
-
     @BindView(R.id.detail__error_message_display)
     TextView mErrorMessageDisplay;
-
     @BindView(R.id.detail_loading_spinner)
     ProgressBar mLoadingIndicator;
-
     @BindView(R.id.trailer_loading_spinner)
     ProgressBar mTrailerLoadingIndicator;
-
-
+    /**
+     * Content URI for the existing favourite Film (null if it's a new record)
+     */
+    private Uri mFavouriteFilmUri;
+    // The current state of the app
+    private int mCurrentState;
+    /**
+     * Content URI for the existing film (null if it's a new record)
+     */
+    private Uri mCurrentFilmUri;
     private String filmID;
+    private String filmTitle;
+    private String plot;
+    private String releaseDate;
+    private String poster;
+    private String rating;
     private String trailerID;
 
     private LinearLayoutManager reviewsLayoutManager;
@@ -126,6 +146,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             mTrailersAdapter.clear();
         }
     };
+
+
     private LoaderManager.LoaderCallbacks<List<Review>> reviewsLoader = new LoaderManager.LoaderCallbacks<List<Review>>() {
 
         @Override
@@ -181,14 +203,14 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         Film object = getIntent().getParcelableExtra(Intent.EXTRA_TEXT);
 
-        String filmTitle = object.getmTitle();
+        filmTitle = object.getmTitle();
         filmID = object.getmId();
-        String plot = object.getmPlot();
-        String releaseDate = object.getmReleaseDate();
-        String poster = object.getmThumbnail();
-        String rating = object.getmUserRating();
+        plot = object.getmPlot();
+        releaseDate = object.getmReleaseDate();
+        poster = object.getmThumbnail();
+        rating = object.getmUserRating();
 
-        mTitle.setText(filmTitle + " " + "ID: " + filmID);
+        mTitle.setText(filmTitle);
         mPlot.setText(plot);
         mReleaseDate.setText(releaseDate);
         Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(mImageDisplay);
@@ -254,7 +276,112 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             mErrorMessageDisplay.setText(R.string.no_internet);
         }
 
+
+        //Button to insert or delete a film to our favourite films database
+        mAddToFavourites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Either show the definition of the current word, or if the definition is currently
+                // showing, move to the next word.
+                switch (mCurrentState) {
+                    case STATE_NOT_FAVOURITE:
+                        insertToFavourite();
+                        break;
+                    case STATE_FAVOURITE:
+                        showDeleteConfirmationDialog();
+                        break;
+                }
+            }
+
+        });
+
     }
+
+
+    private void insertToFavourite() {
+
+        ContentValues values = new ContentValues();
+        values.put(FilmContract.favouriteFilmEntry.COLUMN_FILM_ID, filmID);
+        values.put(FilmContract.favouriteFilmEntry.COLUMN_TITLE, filmTitle);
+        values.put(FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW, plot);
+        values.put(FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE, releaseDate);
+        values.put(FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE, rating);
+        values.put(FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH, poster);
+
+        // Determine if this is a new or existing record by checking if mCurrentRecordUri is null or not
+        if (mCurrentFilmUri == null) {
+            // This is a NEW record, so insert a new record into the provider,
+            // returning the content URI for the new record.
+            Uri newUri = getContentResolver().insert(FilmContract.favouriteFilmEntry.CONTENT_URI, values);
+
+            // Show a toast message depending on whether or not the insertion was successful.
+            if (newUri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.insert_film_failed),
+                        Toast.LENGTH_SHORT).show();
+
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.insert_film_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            // Otherwise this is an EXISTING record, Send a Toast Message saying this film is already
+            // in your Favourites
+            Toast.makeText(this, getString(R.string.film_already_added),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Prompt the user to confirm that they want to delete this film from the database.
+     */
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the record.
+                deleteFilm();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Perform the deletion of the record in the database.
+     */
+    private void deleteFilm() {
+        // Only perform the delete if this is an existing record.
+        if (mCurrentFilmUri != null) {
+            // Call the ContentResolver to delete the record at the given content URI.
+            // Pass in null for the selection and selection args because the mCurrentRecordUri
+            // content URI already identifies the record that we want.
+            int rowsDeleted = getContentResolver().delete(mCurrentFilmUri, null, null);
+
+            // Show a toast message depending on whether or not the delete was successful.
+            if (rowsDeleted == 0) {
+                // If no rows were deleted, then there was an error with the delete.
+                Toast.makeText(this, getString(R.string.editor_delete_record_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the delete was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_delete_record_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 
     @Override
     protected void onResume() {
@@ -308,5 +435,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         startActivity(youTubeIntent);
 
     }
+
+
+
+
+
 }
 

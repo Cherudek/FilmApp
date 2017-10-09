@@ -29,6 +29,36 @@
     <string name="settings">Settings</string>
     <string name="detail_activity">Movie Detail</string>
     <string name="no_reviews_message">Write the first review for this film ;)</string>
+    <string name="insert_to_favourites">ADD TO FAVOURITES</string>
+    <string name="delete_from_favourites">REMOVE FROM FAVOURITES</string>
+
+
+    <!-- Toast message in editor when new record has been successfully inserted [CHAR LIMIT=NONE] -->
+    <string name="insert_film_successful">Film Added to Favourites</string>
+
+    <!-- Toast message in editor when new record has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="insert_film_failed">Error with saving film to Favourites</string>
+
+    <!-- Toast message in detail activity when current film is successfully inserted [CHAR LIMIT=NONE] -->
+    <string name="film_already_added">You already added this film to your Favourites</string>
+
+    <!-- Toast message in detail activity when current film has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_update_record_failed">Error with updating record</string>
+
+    <!-- Toast message in editor when current record was successfully deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_record_successful">Record deleted</string>
+
+    <!-- Toast message in editor when current record has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_record_failed">Error with deleting record</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current record [CHAR LIMIT=NONE] -->
+    <string name="delete_dialog_msg">Delete this record?</string>
+
+    <!-- Dialog button text for the option to confirm deleting the current record [CHAR LIMIT=20] -->
+    <string name="delete">Delete</string>
+
+    <!-- Dialog button text for the option to cancel deletion of the current record [CHAR LIMIT=20] -->
+    <string name="cancel">Cancel</string>
 
 
 </resources>

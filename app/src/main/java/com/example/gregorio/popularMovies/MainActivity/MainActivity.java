@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         // You can change this divider to adjust the size of the poster
-        int widthDivider = 400;
+        int widthDivider = 300;
         int width = displayMetrics.widthPixels;
         int nColumns = width / widthDivider;
         if (nColumns < 2) return 2;
