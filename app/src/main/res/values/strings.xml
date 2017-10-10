@@ -43,13 +43,13 @@
     <string name="film_already_added">You already added this film to your Favourites</string>
 
     <!-- Toast message in detail activity when current film has failed to be inserted [CHAR LIMIT=NONE] -->
-    <string name="editor_update_record_failed">Error with updating record</string>
+    <string name="editor_update_record_failed">Error with updating database</string>
 
     <!-- Toast message in editor when current record was successfully deleted [CHAR LIMIT=NONE] -->
-    <string name="editor_delete_record_successful">Record deleted</string>
+    <string name="film_remove_successful">Film Removed from Favourites</string>
 
     <!-- Toast message in editor when current record has failed to be deleted [CHAR LIMIT=NONE] -->
-    <string name="editor_delete_record_failed">Error with deleting record</string>
+    <string name="film_remove_failed">Error with removing Film</string>
 
     <!-- Dialog message to ask the user to confirm deleting the current record [CHAR LIMIT=NONE] -->
     <string name="delete_dialog_msg">Delete this record?</string>

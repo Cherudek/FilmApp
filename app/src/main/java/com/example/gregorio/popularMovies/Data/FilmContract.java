@@ -18,14 +18,13 @@ public class FilmContract {
      * Play Store.
      */
 
-    public static final String CONTENT_AUTHORITY = "com.example.android.popularMovies";
+    public static final String CONTENT_AUTHORITY = "com.example.gregorio.popularMovies";
 
     /*
  * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
  * the content provider for Popular Movies.
  */
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     /*
      * Possible paths that can be appended to BASE_CONTENT_URI to form valid URI's that Popular Movies
      * can handle. For instance,
@@ -40,12 +39,10 @@ public class FilmContract {
      * will fail, as the ContentProvider hasn't been given any information on what to do with
      * "givemeroot". At least, let's hope not. Don't be that dev, reader. Don't be that dev.
      */
-
     public static final String PATH_FAVOURITE_FILMS = "favouriteFilms";
 
     /* Inner class that defines the table contents of the favourite films table */
     public static final class favouriteFilmEntry implements BaseColumns {
-
 
         /* The base CONTENT_URI used to query the favourite films table from the content provider */
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
@@ -76,9 +73,5 @@ public class FilmContract {
         /* Film vote average to get the average votes for a film */
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";
 
-
     }
-
-
-
 }

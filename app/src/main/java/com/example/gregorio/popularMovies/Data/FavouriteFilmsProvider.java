@@ -11,13 +11,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import static com.example.gregorio.popularMovies.Adapters.FilmAdapter.LOG_TAG;
-
 /**
  * Created by Gregorio on 06/10/2017.
  */
 
 public class FavouriteFilmsProvider extends ContentProvider {
+
+    public static final String LOG_TAG = FavouriteFilmsProvider.class.getSimpleName();
+
 
     /*
      * These constant will be used to match URIs with the data they are looking for. We will take
@@ -172,7 +173,7 @@ public class FavouriteFilmsProvider extends ContentProvider {
              /*
              * When sUriMatcher's match method is called with a URI that looks EXACTLY like this
              *
-             *      content://com.example.android.popularMovies/favouriteFilms/
+             *      content://com.example.gregorio.popularMovies/favouriteFilms/
              *
              * sUriMatcher's match method will return the code that indicates to us that we need
              * to return all of the favourite films in our favouriteFilms table.
@@ -248,9 +249,6 @@ public class FavouriteFilmsProvider extends ContentProvider {
         if (filmID == null) {
             throw new IllegalArgumentException("Film requires an ID");
         }
-
-        // No need to check the breed, any value is valid (including null).
-
         // Check that the Title is not null
         String title = values.getAsString(FilmContract.favouriteFilmEntry.COLUMN_TITLE);
         if (title == null) {
@@ -262,7 +260,6 @@ public class FavouriteFilmsProvider extends ContentProvider {
         if (overview == null) {
             throw new IllegalArgumentException("Film requires an Overview");
         }
-
 
         // Check that the overview is not null
         String releaseDate = values.getAsString(FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE);
@@ -319,7 +316,7 @@ public class FavouriteFilmsProvider extends ContentProvider {
                 break;
             case CODE_FAVOURITE_FILM_ID:
                 // Delete a single row given by the ID in the URI
-                selection = FilmContract.favouriteFilmEntry._ID + "=?";
+                selection = FilmContract.favouriteFilmEntry.COLUMN_FILM_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(FilmContract.favouriteFilmEntry.TABLE_NAME, selection, selectionArgs);
                 break;
@@ -333,9 +330,13 @@ public class FavouriteFilmsProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
+        Log.i(LOG_TAG, "Rows deleted= " + rowsDeleted);
+
         // Return the number of rows deleted
         return rowsDeleted;
+
     }
+
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {

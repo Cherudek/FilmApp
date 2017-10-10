@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gregorio.popularMovies.Data.FilmContract;
+import com.example.gregorio.popularMovies.DetailActivity;
 import com.example.gregorio.popularMovies.Models.Film;
 import com.example.gregorio.popularMovies.R;
 import com.squareup.picasso.Picasso;
@@ -50,30 +50,31 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     public void onBindViewHolder(FavouriteHolder holder, int position) {
 
         // Determine the values of the wanted data
-        final int idIndex = mCursor.getInt(mCursor.getColumnIndexOrThrow(FilmContract.favouriteFilmEntry._ID));
+        final int idIndex = mCursor.getInt(DetailActivity.INDEX_ID);
 
-        int movieIdIndex = mCursor.getColumnIndexOrThrow(FilmContract.favouriteFilmEntry.COLUMN_FILM_ID);
-        int movieTitleIndex = mCursor.getColumnIndexOrThrow(FilmContract.favouriteFilmEntry.COLUMN_TITLE);
-        int movieOverviewIndex = mCursor.getColumnIndexOrThrow(FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW);
-        int movieVoteIndex = mCursor.getColumnIndexOrThrow(FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE);
-        int movieDateIndex = mCursor.getColumnIndexOrThrow(FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE);
-        int movieImagePathIndex = mCursor.getColumnIndexOrThrow(FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH);
+        final int movieIdIndex = mCursor.getInt(DetailActivity.INDEX_FILM_ID);
+        final int movieTitleIndex = mCursor.getInt(DetailActivity.INDEX_TITLE);
+        final int movieOverviewIndex = mCursor.getInt(DetailActivity.INDEX_OVERVIEW);
+        final int movieDateIndex = mCursor.getInt(DetailActivity.INDEX_RELEASE_DATE);
+        final int movieImagePathIndex = mCursor.getInt(DetailActivity.INDEX_POSTER_PATH);
+        final int movieVoteIndex = mCursor.getInt(DetailActivity.INDEX_VOTE_AVERAGE);
 
         mCursor.moveToPosition(position); // get to the right location in the cursor
 
-        final int id = mCursor.getInt(movieIdIndex);
-        String title = mCursor.getString(movieTitleIndex);
-        String overview = mCursor.getString(movieOverviewIndex);
-        String vote = mCursor.getString(movieVoteIndex);
-        String date = mCursor.getString(movieDateIndex);
-        String imagePath = mCursor.getString(movieImagePathIndex);
+        final int columnId = mCursor.getInt(idIndex);
+        final int filmId = mCursor.getInt(movieIdIndex);
+        final String title = mCursor.getString(movieTitleIndex);
+        final String overview = mCursor.getString(movieOverviewIndex);
+        final String vote = mCursor.getString(movieVoteIndex);
+        final String date = mCursor.getString(movieDateIndex);
+        final String imagePath = mCursor.getString(movieImagePathIndex);
 
-        holder.itemView.setTag(id);
-
-//        holder.originalTitle.setText(title);
-//        holder.movieOverview.setText(overview);
-//        holder.voteAverage.setText(vote);
-//        holder.releaseDate.setText(date);
+        holder.itemView.setTag(columnId);
+        holder.itemView.setTag(filmId);
+        holder.itemView.setTag(title);
+        holder.itemView.setTag(overview);
+        holder.itemView.setTag(vote);
+        holder.itemView.setTag(date);
 
         Picasso.with(holder.img.getContext())
                 .load("http://image.tmdb.org/t/p/w185/" + imagePath)

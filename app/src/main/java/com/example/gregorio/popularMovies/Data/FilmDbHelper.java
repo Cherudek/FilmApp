@@ -3,6 +3,7 @@ package com.example.gregorio.popularMovies.Data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import static com.example.gregorio.popularMovies.Data.FilmContract.favouriteFilmEntry;
 
@@ -11,6 +12,9 @@ import static com.example.gregorio.popularMovies.Data.FilmContract.favouriteFilm
  */
 
 public class FilmDbHelper extends SQLiteOpenHelper {
+
+    public static final String LOG_TAG = FilmDbHelper.class.getSimpleName();
+
 
     public static final String DATABASE_NAME = "favouriteFilms.db";
 
@@ -36,11 +40,13 @@ public class FilmDbHelper extends SQLiteOpenHelper {
                         favouriteFilmEntry.COLUMN_FILM_ID + " INTEGER NOT NULL, " +
                         favouriteFilmEntry.COLUMN_TITLE + " STRING NOT NULL, " +
                         favouriteFilmEntry.COLUMN_OVERVIEW + " STRING NOT NULL, " +
-                        favouriteFilmEntry.COLUMN_RELEASE_DATE + "STRING NOT NULL, " +
-                        favouriteFilmEntry.COLUMN_POSTER_PATH + "STRING NOT NULL, " +
-                        favouriteFilmEntry.COLUMN_VOTE_AVERAGE + "STRING NOT NULL);";
+                        favouriteFilmEntry.COLUMN_RELEASE_DATE + " STRING NOT NULL, " +
+                        favouriteFilmEntry.COLUMN_POSTER_PATH + " STRING NOT NULL, " +
+                        favouriteFilmEntry.COLUMN_VOTE_AVERAGE + " STRING NOT NULL);";
 
         db.execSQL(SQL_CREATE_FAVOURITE_FILMS_TABLE);
+
+        Log.i(LOG_TAG, "Database name is :" + SQL_CREATE_FAVOURITE_FILMS_TABLE);
 
     }
 

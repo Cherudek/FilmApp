@@ -79,11 +79,12 @@
                         android:textSize="16sp"
                         tools:text="10" />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/add_to_favourites"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Add to favourites" />
+                        android:textOff="@string/insert_to_favourites"
+                        android:textOn="@string/delete_from_favourites" />
                 </LinearLayout>
             </LinearLayout>
 

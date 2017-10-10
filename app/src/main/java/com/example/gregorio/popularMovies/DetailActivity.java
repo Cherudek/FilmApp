@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -16,12 +17,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.example.gregorio.popularMovies.Adapters.FavouritesAdapter;
 import com.example.gregorio.popularMovies.Adapters.ReviewAdapter;
 import com.example.gregorio.popularMovies.Adapters.TrailerAdapter;
 import com.example.gregorio.popularMovies.Data.FilmContract;
@@ -40,21 +43,36 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.TrailerAdapterOnClickHandler {
 
+    /*
+     * The columns of data that we are interested in saving in our db
+     */
+    public static final String[] FAVOURITE_FILM_PROJECTION = {
+            FilmContract.favouriteFilmEntry._ID,
+            FilmContract.favouriteFilmEntry.COLUMN_FILM_ID,
+            FilmContract.favouriteFilmEntry.COLUMN_TITLE,
+            FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW,
+            FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE,
+            FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH,
+            FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE,
+    };
+    public static final int INDEX_ID = 0;
+    public static final int INDEX_FILM_ID = 1;
+    public static final int INDEX_TITLE = 2;
+    public static final int INDEX_OVERVIEW = 3;
+    public static final int INDEX_RELEASE_DATE = 4;
+    public static final int INDEX_POSTER_PATH = 5;
+    public static final int INDEX_VOTE_AVERAGE = 6;
     final static String API_KEY_PARAM = "api_key";
     final static String API_KEY = "21d79bfbb630e90306b78b394f98db52";
-
     private static final String LOG_TAG = DetailActivity.class.getSimpleName();
     private static final int FILM_REVIEWS_LOADER_ID = 2;
     private static final int FILM_TRAILERS_LOADER_ID = 5;
+    private static final int FILM_FAVOURITES_LOADER = 12;
     private static final String FILM_API_REQUEST_URL = "https://api.themoviedb.org/3/movie";
     private static final String FILM_REVIEWS = "reviews";
     private static final String FILM_TRAILERS = "trailers";
-    // This state is when the film is not a favourite and clicking the button will therefore
-    // insert the film to the favourites database
-    private final int STATE_NOT_FAVOURITE = 0;
-    // This state is when the film is a favourite and clicking the button will therefore
-    // delete the film from our database
-    private final int STATE_FAVOURITE = 1;
+
+
     @BindView(R.id.title)
     TextView mTitle;
     @BindView(R.id.posterDisplay)
@@ -66,7 +84,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     @BindView(R.id.release_date)
     TextView mReleaseDate;
     @BindView(R.id.add_to_favourites)
-    Button mAddToFavourites;
+    ToggleButton mAddToFavourites;
     @BindView(R.id.rv_review)
     RecyclerView rvListView;
     @BindView(R.id.rv_trailers)
@@ -87,6 +105,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
      * Content URI for the existing film (null if it's a new record)
      */
     private Uri mCurrentFilmUri;
+    private String mCurrentFilmUriString;
     private String filmID;
     private String filmTitle;
     private String plot;
@@ -100,13 +119,15 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     private ReviewAdapter mReviewsAdapter;
     private TrailerAdapter mTrailersAdapter;
-
-
+    private FavouritesAdapter mFavouritesAdapter;
 
     private int numberOfReviews;
     private int numberOfTrailers;
+    private int numberOfFavourites;
 
     private Context mContext;
+
+
     LoaderManager.LoaderCallbacks<List<Trailer>> trailerLoader = new LoaderManager.LoaderCallbacks<List<Trailer>>() {
 
         @Override
@@ -165,7 +186,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             //returns a url string for the QueryMovieUtils background task
             Log.i(LOG_TAG, "URI is: " + baseAndKey);
             return new ReviewLoader(mContext, baseAndKey.toString());
-
         }
 
         @Override
@@ -182,16 +202,47 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             } else {
                 showErrorMessage();
             }
-
         }
 
         @Override
         public void onLoaderReset(Loader<List<Review>> loader) {
             // Loader reset, so we can clear out our existing data.
             mReviewsAdapter.clear();
+        }
+    };
+
+    private LoaderManager.LoaderCallbacks<Cursor> favouriteLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
+            switch (loaderId) {
+
+                case FILM_FAVOURITES_LOADER:
+                    mContext = getApplicationContext();
+                    return new android.support.v4.content.CursorLoader(mContext,
+                            mCurrentFilmUri,
+                            FAVOURITE_FILM_PROJECTION,
+                            null,
+                            null,
+                            null);
+                default:
+                    throw new RuntimeException("Loader Not Implemented: " + loaderId);
+            }
 
         }
 
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            // Swap the new cursor in.  (The framework will take care of closing the
+            // old cursor once we return.)
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
     };
 
     @Override
@@ -209,6 +260,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         releaseDate = object.getmReleaseDate();
         poster = object.getmThumbnail();
         rating = object.getmUserRating();
+
+
+        mCurrentFilmUriString = FilmContract.favouriteFilmEntry.CONTENT_URI + "/" + filmID;
 
         mTitle.setText(filmTitle);
         mPlot.setText(plot);
@@ -266,7 +320,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
+
             getSupportLoaderManager().initLoader(FILM_REVIEWS_LOADER_ID, null, reviewsLoader);
+
             getSupportLoaderManager().initLoader(FILM_TRAILERS_LOADER_ID, null, trailerLoader);
         } else {
             // Otherwise, display error
@@ -275,28 +331,23 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             // Update empty state with no connection error message
             mErrorMessageDisplay.setText(R.string.no_internet);
         }
-
+        // getSupportLoaderManager().initLoader(FILM_FAVOURITES_LOADER, null, favouriteLoader);
 
         //Button to insert or delete a film to our favourite films database
-        mAddToFavourites.setOnClickListener(new View.OnClickListener() {
+        mAddToFavourites.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-
-                // Either show the definition of the current word, or if the definition is currently
-                // showing, move to the next word.
-                switch (mCurrentState) {
-                    case STATE_NOT_FAVOURITE:
-                        insertToFavourite();
-                        break;
-                    case STATE_FAVOURITE:
-                        showDeleteConfirmationDialog();
-                        break;
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    insertToFavourite();
+                } else {
+                    showDeleteConfirmationDialog();
                 }
             }
-
         });
 
+
     }
+
 
 
     private void insertToFavourite() {
@@ -306,11 +357,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         values.put(FilmContract.favouriteFilmEntry.COLUMN_TITLE, filmTitle);
         values.put(FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW, plot);
         values.put(FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE, releaseDate);
-        values.put(FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE, rating);
         values.put(FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH, poster);
+        values.put(FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE, rating);
 
-        // Determine if this is a new or existing record by checking if mCurrentRecordUri is null or not
-        if (mCurrentFilmUri == null) {
+        // Determine if this is a new or existing record by checking if mCurrentFilmUri is null or not
+        if (mFavouriteFilmUri == null) {
             // This is a NEW record, so insert a new record into the provider,
             // returning the content URI for the new record.
             Uri newUri = getContentResolver().insert(FilmContract.favouriteFilmEntry.CONTENT_URI, values);
@@ -333,6 +384,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             Toast.makeText(this, getString(R.string.film_already_added),
                     Toast.LENGTH_SHORT).show();
         }
+
     }
 
     /**
@@ -361,6 +413,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
      * Perform the deletion of the record in the database.
      */
     private void deleteFilm() {
+
+        mCurrentFilmUri = Uri.parse(mCurrentFilmUriString);
+
         // Only perform the delete if this is an existing record.
         if (mCurrentFilmUri != null) {
             // Call the ContentResolver to delete the record at the given content URI.
@@ -371,22 +426,21 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             // Show a toast message depending on whether or not the delete was successful.
             if (rowsDeleted == 0) {
                 // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this, getString(R.string.editor_delete_record_failed),
+                Toast.makeText(this, getString(R.string.film_remove_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the delete was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_delete_record_successful),
+                Toast.makeText(this, getString(R.string.film_remove_successful),
                         Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-
-
     @Override
     protected void onResume() {
         getSupportLoaderManager().restartLoader(FILM_REVIEWS_LOADER_ID, null, reviewsLoader);
         getSupportLoaderManager().restartLoader(FILM_TRAILERS_LOADER_ID, null, trailerLoader);
+        // getSupportLoaderManager().restartLoader(FILM_FAVOURITES_LOADER, null, favouriteLoader);
         super.onResume();
     }
 
@@ -425,7 +479,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-
     @Override
     public void onClick(String trailerName, String trailerId) {
 
@@ -433,12 +486,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         Intent youTubeIntent = new Intent(Intent.ACTION_VIEW, youtubeUrl);
         youTubeIntent.addCategory(Intent.CATEGORY_BROWSABLE);
         startActivity(youTubeIntent);
-
     }
-
-
-
-
-
 }
 
