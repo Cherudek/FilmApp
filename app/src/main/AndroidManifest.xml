@@ -30,6 +30,16 @@
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.example.gregorio.popularMovies.MainActivity.MainActivity" />
+
+        <activity
+            android:name="com.example.gregorio.popularMovies.FavouriteActivity"
+            android:label="@string/favourite_activity"
+            android:parentActivityName="com.example.gregorio.popularMovies.MainActivity.MainActivity"></activity>
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.gregorio.popularMovies.MainActivity.MainActivity" />
+
         <activity
             android:name="com.example.gregorio.popularMovies.SettingsActivity"
             android:label="@string/settings"

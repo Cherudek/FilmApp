@@ -20,10 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gregorio.popularMovies.Adapters.FilmAdapter;
 import com.example.gregorio.popularMovies.BuildConfig;
 import com.example.gregorio.popularMovies.DetailActivity;
+import com.example.gregorio.popularMovies.FavouriteActivity;
 import com.example.gregorio.popularMovies.Loaders.FilmLoader;
 import com.example.gregorio.popularMovies.Models.Film;
 import com.example.gregorio.popularMovies.R;
@@ -33,16 +35,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmAdapterOnClickHandler, LoaderManager.LoaderCallbacks<List<Film>> {
 
+    public static final String POPULAR_MOVIES_SORT_SELECTION = "popular";
+    public static final String TOP_RATED_MOVIES_SORT_SELECTION = "top_rated";
     final static String API_KEY_PARAM = "api_key";
-
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-
     private static final int FILM_LOADER_ID = 1;
-
     private static final String API_KEY = BuildConfig.API_KEY;
-
     private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/";
-
     private RecyclerView recyclerView;
 
     private GridLayoutManager layoutManager;
@@ -54,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     private ProgressBar mLoadingIndicator;
 
     private int numberOFMovies;
+
+    private SharedPreferences sharedPrefs;
 
 
     @Override
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         //onCreateLoader() method to read the user’s latest preferences for the sort criteria,
         //construct a proper URI with their preference, and then create a new Loader for that URI.
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         //Get the selected preference parameter from the SettingsActivity and pass it on to the uri builder
         String orderBy = sharedPrefs.getString(
@@ -153,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
             case "top_rated":
                 getSupportActionBar().setTitle("Top Rated Movies");
                 break;
+
         }
 
         //returns a url string for the QueryMovieUtils background task
@@ -246,6 +248,22 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
+            return true;
+        }
+
+
+        //noinspection SimplifiableIfStatement
+        else if (id == R.id.most_popular) {
+            Toast.makeText(this, "Most Popular", Toast.LENGTH_SHORT).show();
+            // sharedPrefs.       (POPULAR_MOVIES_SORT_SELECTION, this);
+            return true;
+        } else if (id == R.id.most_rated) {
+            Toast.makeText(this, "Top Rated", Toast.LENGTH_SHORT).show();
+            // sharedPrefs.      (TOP_RATED_MOVIES_SORT_SELECTION, this);
+            return true;
+        } else if (id == R.id.favourite_movies) {
+            Intent favouriteMovie = new Intent(this, FavouriteActivity.class);
+            startActivity(favouriteMovie);
             return true;
         }
         return super.onOptionsItemSelected(item);

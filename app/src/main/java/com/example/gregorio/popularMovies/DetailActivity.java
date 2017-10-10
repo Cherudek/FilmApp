@@ -360,6 +360,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         values.put(FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH, poster);
         values.put(FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE, rating);
 
+
         // Determine if this is a new or existing record by checking if mCurrentFilmUri is null or not
         if (mFavouriteFilmUri == null) {
             // This is a NEW record, so insert a new record into the provider,

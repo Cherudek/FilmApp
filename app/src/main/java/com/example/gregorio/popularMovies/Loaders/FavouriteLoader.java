@@ -4,11 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.AsyncTaskLoader;
 
-/**
- * Created by Gregorio on 09/10/2017.
- */
+import com.example.gregorio.popularMovies.Data.FavouriteFilmsProvider;
+
 
 public class FavouriteLoader extends AsyncTaskLoader<Cursor> {
+
+    private FavouriteFilmsProvider mFavouriteFilmUri;
 
 
     public FavouriteLoader(Context context) {
@@ -17,6 +18,8 @@ public class FavouriteLoader extends AsyncTaskLoader<Cursor> {
 
     @Override
     public Cursor loadInBackground() {
+
+
         return null;
     }
 }
