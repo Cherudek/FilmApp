@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     }
 
+
     // this method dynamically calculate the number of columns and
     // the layout would adapt to the screen size and orientation
 
@@ -139,6 +140,13 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
                 getString(R.string.settings_order_by_default)
         );
 
+        String favourite = sharedPrefs.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_favourites_value)
+        );
+
+        String Key = getString(R.string.settings_order_by_key);
+
         //Uri builder to pass on the JSON query request
         Uri baseUri = Uri.parse(MOVIE_DB_API_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
@@ -154,13 +162,10 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
             case "top_rated":
                 getSupportActionBar().setTitle("Top Rated Movies");
                 break;
-
         }
-
         //returns a url string for the QueryMovieUtils background task
         Log.i(LOG_TAG, "URI is: " + baseAndKey);
         return new FilmLoader(this, baseAndKey.toString());
-
 
     }
 
@@ -251,17 +256,24 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
             return true;
         }
 
-
-        //noinspection SimplifiableIfStatement
+        // New Menu Options linked to sharedPreference
         else if (id == R.id.most_popular) {
             Toast.makeText(this, "Most Popular", Toast.LENGTH_SHORT).show();
-            // sharedPrefs.       (POPULAR_MOVIES_SORT_SELECTION, this);
+            sharedPrefs.getString(
+                    getString(R.string.settings_order_by_key),
+                    getString(R.string.settings_order_by_most_popular_value));
             return true;
         } else if (id == R.id.most_rated) {
             Toast.makeText(this, "Top Rated", Toast.LENGTH_SHORT).show();
-            // sharedPrefs.      (TOP_RATED_MOVIES_SORT_SELECTION, this);
+            sharedPrefs.getString(
+                    getString(R.string.settings_order_by_key),
+                    getString(R.string.settings_order_by_most_popular_value));
             return true;
         } else if (id == R.id.favourite_movies) {
+            sharedPrefs.getString(
+                    getString(R.string.settings_order_by_key),
+                    getString(R.string.settings_order_by_most_popular_value));
+
             Intent favouriteMovie = new Intent(this, FavouriteActivity.class);
             startActivity(favouriteMovie);
             return true;

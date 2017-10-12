@@ -34,6 +34,7 @@
         <activity
             android:name="com.example.gregorio.popularMovies.FavouriteActivity"
             android:label="@string/favourite_activity"
+            android:launchMode="singleTop"
             android:parentActivityName="com.example.gregorio.popularMovies.MainActivity.MainActivity"></activity>
 
         <meta-data

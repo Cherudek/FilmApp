@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -43,34 +44,16 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.TrailerAdapterOnClickHandler {
 
-    /*
-     * The columns of data that we are interested in saving in our db
-     */
-    public static final String[] FAVOURITE_FILM_PROJECTION = {
-            FilmContract.favouriteFilmEntry._ID,
-            FilmContract.favouriteFilmEntry.COLUMN_FILM_ID,
-            FilmContract.favouriteFilmEntry.COLUMN_TITLE,
-            FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW,
-            FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE,
-            FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH,
-            FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE,
-    };
-    public static final int INDEX_ID = 0;
-    public static final int INDEX_FILM_ID = 1;
-    public static final int INDEX_TITLE = 2;
-    public static final int INDEX_OVERVIEW = 3;
-    public static final int INDEX_RELEASE_DATE = 4;
-    public static final int INDEX_POSTER_PATH = 5;
-    public static final int INDEX_VOTE_AVERAGE = 6;
     final static String API_KEY_PARAM = "api_key";
     final static String API_KEY = "21d79bfbb630e90306b78b394f98db52";
     private static final String LOG_TAG = DetailActivity.class.getSimpleName();
     private static final int FILM_REVIEWS_LOADER_ID = 2;
     private static final int FILM_TRAILERS_LOADER_ID = 5;
-    private static final int FILM_FAVOURITES_LOADER = 12;
     private static final String FILM_API_REQUEST_URL = "https://api.themoviedb.org/3/movie";
     private static final String FILM_REVIEWS = "reviews";
     private static final String FILM_TRAILERS = "trailers";
+
+    boolean isfavourite = false;
 
 
     @BindView(R.id.title)
@@ -211,39 +194,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         }
     };
 
-    private LoaderManager.LoaderCallbacks<Cursor> favouriteLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
-
-        @Override
-        public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
-            switch (loaderId) {
-
-                case FILM_FAVOURITES_LOADER:
-                    mContext = getApplicationContext();
-                    return new android.support.v4.content.CursorLoader(mContext,
-                            mCurrentFilmUri,
-                            FAVOURITE_FILM_PROJECTION,
-                            null,
-                            null,
-                            null);
-                default:
-                    throw new RuntimeException("Loader Not Implemented: " + loaderId);
-            }
-
-        }
-
-
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            // Swap the new cursor in.  (The framework will take care of closing the
-            // old cursor once we return.)
-
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,6 +219,13 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mReleaseDate.setText(releaseDate);
         Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(mImageDisplay);
         mUserRating.setText(rating);
+
+
+//        Context context = getApplicationContext();
+//        SharedPreferences sharedPref = context.getSharedPreferences(
+//                getString(R.string.saved_favourite_key), Context.MODE_PRIVATE);
+
+        // mAddToFavourites.setChecked(sharedPref.getBoolean((getString(R.string.saved_favourite_key)), true));
 
         /*
          * A LinearLayoutManager is responsible for measuring and positioning item views within a
@@ -330,22 +287,49 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             mLoadingIndicator.setVisibility(View.GONE);
             // Update empty state with no connection error message
             mErrorMessageDisplay.setText(R.string.no_internet);
+
         }
+
+        //  isFavorite();
         // getSupportLoaderManager().initLoader(FILM_FAVOURITES_LOADER, null, favouriteLoader);
 
         //Button to insert or delete a film to our favourite films database
         mAddToFavourites.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isFavourite) {
+                if (isFavourite) {
+                    SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.saved_favourite_key), MODE_PRIVATE).edit();
+                    editor.putBoolean(getString(R.string.saved_favourite_key), true);
+                    editor.commit();
                     insertToFavourite();
                 } else {
+                    SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.saved_favourite_key), MODE_PRIVATE).edit();
+                    editor.putBoolean(getString(R.string.saved_favourite_key), false);
+                    editor.commit();
                     showDeleteConfirmationDialog();
                 }
             }
         });
 
+    }
 
+
+    private boolean isFavorite() {
+
+        Cursor movieCursor = getContentResolver().query(
+                FilmContract.favouriteFilmEntry.CONTENT_URI,
+                new String[]{FilmContract.favouriteFilmEntry.COLUMN_FILM_ID},
+                FilmContract.favouriteFilmEntry.COLUMN_FILM_ID + " = " + filmID,
+                null,
+                null);
+        int movieId = movieCursor.getColumnIndex(getString(FavouriteActivity.INDEX_FILM_ID));
+        String movieIdString = getString(movieId);
+
+        if (movieIdString == filmID) {
+            return isfavourite = true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -437,6 +421,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         }
     }
 
+
     @Override
     protected void onResume() {
         getSupportLoaderManager().restartLoader(FILM_REVIEWS_LOADER_ID, null, reviewsLoader);
@@ -479,6 +464,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
+
 
     @Override
     public void onClick(String trailerName, String trailerId) {

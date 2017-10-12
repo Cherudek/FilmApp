@@ -25,10 +25,5 @@
         android:title="@string/favourites"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/about_the_app"
-        android:orderInCategory="4"
-        android:title="@string/about"
-        app:showAsAction="never" />
 
 </menu>

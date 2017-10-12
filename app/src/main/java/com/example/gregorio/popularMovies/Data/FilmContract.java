@@ -41,6 +41,12 @@ public class FilmContract {
      */
     public static final String PATH_FAVOURITE_FILMS = "favouriteFilms";
 
+    public static Uri buildFavouriteUriwithID(int filmId) {
+        return FilmContract.favouriteFilmEntry.CONTENT_URI.buildUpon()
+                .appendPath(Integer.toString(filmId))
+                .build();
+    }
+
     /* Inner class that defines the table contents of the favourite films table */
     public static final class favouriteFilmEntry implements BaseColumns {
 
@@ -52,8 +58,6 @@ public class FilmContract {
         /* Used internally as the name of our favourite films table. */
         public static final String TABLE_NAME = "favouriteFilms";
 
-        //Column ID <P>Type: INTEGER</P>
-        public static final String _ID = BaseColumns._ID;
 
         /* Film id as returned by API, used to identify the id to be used */
         public static final String COLUMN_FILM_ID = "id";

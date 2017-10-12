@@ -1,5 +1,6 @@
 package com.example.gregorio.popularMovies;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -23,6 +24,33 @@ public class SettingsActivity extends AppCompatActivity {
     public static class FilmPreferenceFragment extends PreferenceFragment
             implements Preference.OnPreferenceChangeListener {
 
+        public FilmPreferenceFragment() {
+        }
+
+
+        //bindPreferenceSummaryToValue() helper method to set the current MoviesPreferenceFragment instance
+        // as the listener on each preference.
+
+        // We also read the current value of the preference stored in the SharedPreferences on the device,
+        // and display that in the preference summary (so that the user can see the current value of the preference).
+
+        public static void setSharedPref(String value, Context context) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("SORT_ACCORDING_TO_USER_PREF", value);
+            editor.apply();
+        }
+
+        //MoviesPreferenceFragment class should implement the OnPreferenceChangeListener interface,
+        //and override the onPreferenceChange() method.
+        // The code in this method takes care of updating the displayed preference summary
+        // after it has been changed.
+
+        public static String getSharedPref(Context context) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            return preferences.getString("SORT_ACCORDING_TO_USER_PREF", "popular");
+        }
+
         //override the onCreate() method to use the settings_main XML resource
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -35,16 +63,11 @@ public class SettingsActivity extends AppCompatActivity {
             //it displays the current value stored in SharedPreferences.
 
             Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
+            Preference favourites = findPreference(getString(R.string.settings_order_by_favourites));
             bindPreferenceSummaryToValue(orderBy);
+            //bindPreferenceSummaryToValue(favourites);
 
         }
-
-
-        //bindPreferenceSummaryToValue() helper method to set the current MoviesPreferenceFragment instance
-        // as the listener on each preference.
-
-        // We also read the current value of the preference stored in the SharedPreferences on the device,
-        // and display that in the preference summary (so that the user can see the current value of the preference).
 
         private void bindPreferenceSummaryToValue(Preference preference) {
 
@@ -53,11 +76,6 @@ public class SettingsActivity extends AppCompatActivity {
             String preferenceString = preferences.getString(preference.getKey(), "");
             onPreferenceChange(preference, preferenceString);
         }
-
-        //MoviesPreferenceFragment class should implement the OnPreferenceChangeListener interface,
-        //and override the onPreferenceChange() method.
-        // The code in this method takes care of updating the displayed preference summary
-        // after it has been changed.
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -77,6 +95,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
             return true;
         }
+
     }
 
 

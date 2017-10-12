@@ -256,22 +256,24 @@ public class FavouriteFilmsProvider extends ContentProvider {
         }
 
         // Check that the overview is not null
-        String overview = values.getAsString(FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW);
-        if (overview == null) {
-            throw new IllegalArgumentException("Film requires an Overview");
-        }
-
-        // Check that the overview is not null
         String releaseDate = values.getAsString(FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE);
         if (releaseDate == null) {
             throw new IllegalArgumentException("Film requires a release date");
         }
+
 
         // Check that the poster path is not null
         String posterPath = values.getAsString(FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH);
         if (posterPath == null) {
             throw new IllegalArgumentException("Film requires a Poster Path");
         }
+
+        // Check that the overview is not null
+        String overview = values.getAsString(FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW);
+        if (overview == null) {
+            throw new IllegalArgumentException("Film requires an Overview");
+        }
+
 
         // Check that the average vote is not null
         String voteAverage = values.getAsString(FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE);

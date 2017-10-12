@@ -3,35 +3,33 @@ package com.example.gregorio.popularMovies.Adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gregorio.popularMovies.DetailActivity;
-import com.example.gregorio.popularMovies.Models.Film;
+import com.example.gregorio.popularMovies.Data.FilmContract;
 import com.example.gregorio.popularMovies.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder> {
 
+
     public static final String LOG_TAG = FavouritesAdapter.class.getSimpleName();
-    private static Context mContext;
-    private FavoritesAdapterOnClickHandler mClickHandler;
-    private List<Film> mMovieData = new ArrayList<>();
+
+    private Context mContext;
     private Cursor mCursor;
 
-    private ImageView filmPoster;
+    private FavoritesAdapterOnClickHandler mClickHandler;
 
+    private ImageView filmPoster;
     private TextView originalTitle;
 
-    public FavouritesAdapter(FavoritesAdapterOnClickHandler clickHandler, int numberOfItems) {
+    public FavouritesAdapter(FavoritesAdapterOnClickHandler clickHandler, Context context) {
         mClickHandler = clickHandler;
-        int items = numberOfItems;
+        mContext = context;
     }
 
     @Override
@@ -49,27 +47,25 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     @Override
     public void onBindViewHolder(FavouriteHolder holder, int position) {
 
-        // Determine the values of the wanted data
-        final int idIndex = mCursor.getInt(DetailActivity.INDEX_ID);
-
-        final int movieIdIndex = mCursor.getInt(DetailActivity.INDEX_FILM_ID);
-        final int movieTitleIndex = mCursor.getInt(DetailActivity.INDEX_TITLE);
-        final int movieOverviewIndex = mCursor.getInt(DetailActivity.INDEX_OVERVIEW);
-        final int movieDateIndex = mCursor.getInt(DetailActivity.INDEX_RELEASE_DATE);
-        final int movieImagePathIndex = mCursor.getInt(DetailActivity.INDEX_POSTER_PATH);
-        final int movieVoteIndex = mCursor.getInt(DetailActivity.INDEX_VOTE_AVERAGE);
+        //mCursor.moveToFirst();
 
         mCursor.moveToPosition(position); // get to the right location in the cursor
 
-        final int columnId = mCursor.getInt(idIndex);
+        // Determine the values of the wanted data
+        final int movieIdIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_FILM_ID);
+        final int movieTitleIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_TITLE);
+        final int movieDateIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE);
+        final int movieImagePathIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH);
+        final int movieOverviewIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW);
+        final int movieVoteIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE);
+
         final int filmId = mCursor.getInt(movieIdIndex);
         final String title = mCursor.getString(movieTitleIndex);
-        final String overview = mCursor.getString(movieOverviewIndex);
-        final String vote = mCursor.getString(movieVoteIndex);
         final String date = mCursor.getString(movieDateIndex);
         final String imagePath = mCursor.getString(movieImagePathIndex);
+        final String overview = mCursor.getString(movieOverviewIndex);
+        final String vote = mCursor.getString(movieVoteIndex);
 
-        holder.itemView.setTag(columnId);
         holder.itemView.setTag(filmId);
         holder.itemView.setTag(title);
         holder.itemView.setTag(overview);
@@ -80,11 +76,37 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
                 .load("http://image.tmdb.org/t/p/w185/" + imagePath)
                 .into(holder.img);
 
+        Log.i(LOG_TAG, "Image Path is: " + imagePath);
     }
 
+    /**
+     * Returns the number of items to display.
+     */
     @Override
     public int getItemCount() {
-        return mMovieData.size();
+        if (mCursor == null) {
+            return 0;
+        }
+        return mCursor.getCount();
+    }
+
+    /**
+     * When data changes and a re-query occurs, this function swaps the old Cursor
+     * with a newly updated Cursor (Cursor c) that is passed in.
+     */
+    public Cursor swapCursor(Cursor c) {
+        // check if this cursor is the same as the previous cursor (mCursor)
+        if (mCursor == c) {
+            return null; // bc nothing has changed
+        }
+        Cursor temp = mCursor;
+        this.mCursor = c; // new cursor value assigned
+
+        //check if this is a valid cursor, then update the cursor
+        if (c != null) {
+            this.notifyDataSetChanged();
+        }
+        return temp;
     }
 
     /**
@@ -108,16 +130,24 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            Film film = mMovieData.get(adapterPosition);
 
-            String filmTitle = film.getmTitle();
-            String filmId = film.getmId();
-            String plot = film.getmPlot();
-            String releaseDate = film.getmReleaseDate();
-            String filmPosterPath = film.getmThumbnail();
-            String filmRating = film.getmUserRating();
+            mCursor.moveToPosition(adapterPosition);
 
-            mClickHandler.onClick(filmTitle, filmId, plot, releaseDate, filmPosterPath, filmRating);
+            final int movieIdIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_FILM_ID);
+            final int movieTitleIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_TITLE);
+            final int movieDateIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_RELEASE_DATE);
+            final int movieImagePathIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_POSTER_PATH);
+            final int movieOverviewIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_OVERVIEW);
+            final int movieVoteIndex = mCursor.getColumnIndex(FilmContract.favouriteFilmEntry.COLUMN_VOTE_AVERAGE);
+
+            final String filmId = mCursor.getString(movieIdIndex);
+            final String title = mCursor.getString(movieTitleIndex);
+            final String overview = mCursor.getString(movieOverviewIndex);
+            final String vote = mCursor.getString(movieVoteIndex);
+            final String date = mCursor.getString(movieDateIndex);
+            final String imagePath = mCursor.getString(movieImagePathIndex);
+
+            mClickHandler.onClick(title, filmId, overview, date, imagePath, vote);
 
         }
     }
