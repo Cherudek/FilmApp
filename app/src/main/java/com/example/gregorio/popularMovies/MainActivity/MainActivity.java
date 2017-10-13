@@ -130,22 +130,21 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     @Override
     public Loader<List<Film>> onCreateLoader(int i, Bundle bundle) {
 
+        Context context = getApplicationContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.settings_order_by_key), Context.MODE_PRIVATE);
+
         //onCreateLoader() method to read the user’s latest preferences for the sort criteria,
         //construct a proper URI with their preference, and then create a new Loader for that URI.
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        //Get the selected preference parameter from the SettingsActivity and pass it on to the uri builder
+
+        // Get the selected preference parameter from the SettingsActivity and pass it on to the uri builder
         String orderBy = sharedPrefs.getString(
                 getString(R.string.settings_order_by_key),
                 getString(R.string.settings_order_by_default)
         );
 
-        String favourite = sharedPrefs.getString(
-                getString(R.string.settings_order_by_key),
-                getString(R.string.settings_order_by_favourites_value)
-        );
-
-        String Key = getString(R.string.settings_order_by_key);
 
         //Uri builder to pass on the JSON query request
         Uri baseUri = Uri.parse(MOVIE_DB_API_REQUEST_URL);
@@ -258,21 +257,24 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         // New Menu Options linked to sharedPreference
         else if (id == R.id.most_popular) {
+
+            SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.settings_order_by_key), MODE_PRIVATE).edit();
+            editor.putString(getString(R.string.settings_order_by_key), POPULAR_MOVIES_SORT_SELECTION);
+            editor.commit();
+
             Toast.makeText(this, "Most Popular", Toast.LENGTH_SHORT).show();
-            sharedPrefs.getString(
-                    getString(R.string.settings_order_by_key),
-                    getString(R.string.settings_order_by_most_popular_value));
+
             return true;
         } else if (id == R.id.most_rated) {
+            SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.settings_order_by_key), MODE_PRIVATE).edit();
+            editor.putString(getString(R.string.settings_order_by_key), TOP_RATED_MOVIES_SORT_SELECTION);
+            editor.commit();
             Toast.makeText(this, "Top Rated", Toast.LENGTH_SHORT).show();
-            sharedPrefs.getString(
-                    getString(R.string.settings_order_by_key),
-                    getString(R.string.settings_order_by_most_popular_value));
+
+
             return true;
         } else if (id == R.id.favourite_movies) {
-            sharedPrefs.getString(
-                    getString(R.string.settings_order_by_key),
-                    getString(R.string.settings_order_by_most_popular_value));
+
 
             Intent favouriteMovie = new Intent(this, FavouriteActivity.class);
             startActivity(favouriteMovie);

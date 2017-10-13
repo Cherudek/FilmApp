@@ -157,10 +157,9 @@ public class FavouriteActivity extends AppCompatActivity implements FavouritesAd
                 // Hide loading indicator because the data has been loaded
                 mLoadingIndicator.setVisibility(View.GONE);
             recyclerViewFavourites.setVisibility(View.VISIBLE);
-        }
-
-        if (!cursorHasValidData) {
+        } else if (!cursorHasValidData) {
             /* No data to display, simply return and do nothing */
+            mErrorMessageDisplay.setText(getString(R.string.error_message));
             return;
         }
 

@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.gregorio.popularMovies.Adapters.FavouritesAdapter;
 import com.example.gregorio.popularMovies.Adapters.ReviewAdapter;
 import com.example.gregorio.popularMovies.Adapters.TrailerAdapter;
 import com.example.gregorio.popularMovies.Data.FilmContract;
@@ -53,7 +52,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private static final String FILM_REVIEWS = "reviews";
     private static final String FILM_TRAILERS = "trailers";
 
-    boolean isfavourite = false;
+    boolean mIsFavourite = false;
 
 
     @BindView(R.id.title)
@@ -78,12 +77,12 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     ProgressBar mLoadingIndicator;
     @BindView(R.id.trailer_loading_spinner)
     ProgressBar mTrailerLoadingIndicator;
+    SharedPreferences sharedPref;
     /**
-     * Content URI for the existing favourite Film (null if it's a new record)
+     * Cursor for checking if the film in the details view is in the favourite Films database.
      */
+    private Cursor mCursor;
     private Uri mFavouriteFilmUri;
-    // The current state of the app
-    private int mCurrentState;
     /**
      * Content URI for the existing film (null if it's a new record)
      */
@@ -95,18 +94,15 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private String releaseDate;
     private String poster;
     private String rating;
-    private String trailerID;
 
     private LinearLayoutManager reviewsLayoutManager;
     private LinearLayoutManager trailerLayoutManager;
 
     private ReviewAdapter mReviewsAdapter;
     private TrailerAdapter mTrailersAdapter;
-    private FavouritesAdapter mFavouritesAdapter;
 
     private int numberOfReviews;
     private int numberOfTrailers;
-    private int numberOfFavourites;
 
     private Context mContext;
 
@@ -220,24 +216,13 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(mImageDisplay);
         mUserRating.setText(rating);
 
+//
+//            Context context = getApplicationContext();
+//            sharedPref = context.getSharedPreferences(
+//                    getString(R.string.saved_favourite_key), Context.MODE_PRIVATE);
 
-//        Context context = getApplicationContext();
-//        SharedPreferences sharedPref = context.getSharedPreferences(
-//                getString(R.string.saved_favourite_key), Context.MODE_PRIVATE);
 
-        // mAddToFavourites.setChecked(sharedPref.getBoolean((getString(R.string.saved_favourite_key)), true));
 
-        /*
-         * A LinearLayoutManager is responsible for measuring and positioning item views within a
-         * RecyclerView into a linear list. This means that it can produce either a horizontal or
-         * vertical list depending on which parameter you pass in to the LinearLayoutManager
-         * constructor. By default, if you don't specify an orientation, you get a vertical list.
-         * In our case, we want a vertical list, so we don't need to pass in an orientation flag to
-         * the LinearLayoutManager constructor.
-         *
-         * There are other LayoutManagers available to display your data in uniform grids,
-         * staggered grids, and more! See the developer documentation for more details.
-         */
 
         reviewsLayoutManager = new LinearLayoutManager(this);
 
@@ -256,7 +241,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         rvTrailers.setHasFixedSize(true);
 
         /*
-         * The GreenAdapter is responsible for displaying each item in the list.
+         * The 2 Adapters are responsible for displaying trailers and reviews int their appropriate recyclerViews.
          */
         mReviewsAdapter = new ReviewAdapter(numberOfReviews);
         mTrailersAdapter = new TrailerAdapter(this, numberOfTrailers);
@@ -290,49 +275,58 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         }
 
-        //  isFavorite();
-        // getSupportLoaderManager().initLoader(FILM_FAVOURITES_LOADER, null, favouriteLoader);
 
-        //Button to insert or delete a film to our favourite films database
+        checkIfMovieIsInDatabase();
+
         mAddToFavourites.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isFavourite) {
                 if (isFavourite) {
-                    SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.saved_favourite_key), MODE_PRIVATE).edit();
-                    editor.putBoolean(getString(R.string.saved_favourite_key), true);
-                    editor.commit();
+                    // mAddToFavourites.setChecked(sharedPref.getBoolean((getString(R.string.saved_favourite_key)), false));
+//                       SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.saved_favourite_key), MODE_PRIVATE).edit();
+//                       editor.putBoolean(getString(R.string.saved_favourite_key), true);
+//                       editor.commit();
                     insertToFavourite();
+
                 } else {
-                    SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.saved_favourite_key), MODE_PRIVATE).edit();
-                    editor.putBoolean(getString(R.string.saved_favourite_key), false);
-                    editor.commit();
+                    //mAddToFavourites.setChecked(sharedPref.getBoolean((getString(R.string.saved_favourite_key)), true));
+//                       SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.saved_favourite_key), MODE_PRIVATE).edit();
+//                       editor.putBoolean(getString(R.string.saved_favourite_key), false);
+//                       editor.commit();
                     showDeleteConfirmationDialog();
                 }
             }
         });
-
     }
 
+    ///method to check whether the film displayed in our DetailView is favourite film database.
+    public void checkIfMovieIsInDatabase() {
+        String[] projection = {FilmContract.favouriteFilmEntry.COLUMN_FILM_ID};
+        String selection = FilmContract.favouriteFilmEntry.COLUMN_FILM_ID + "=? ";
+        String[] selectionArgs = {filmID};
 
-    private boolean isFavorite() {
-
-        Cursor movieCursor = getContentResolver().query(
-                FilmContract.favouriteFilmEntry.CONTENT_URI,
-                new String[]{FilmContract.favouriteFilmEntry.COLUMN_FILM_ID},
-                FilmContract.favouriteFilmEntry.COLUMN_FILM_ID + " = " + filmID,
-                null,
+        mCursor = getContentResolver().query(FilmContract.favouriteFilmEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
                 null);
-        int movieId = movieCursor.getColumnIndex(getString(FavouriteActivity.INDEX_FILM_ID));
-        String movieIdString = getString(movieId);
 
-        if (movieIdString == filmID) {
-            return isfavourite = true;
+        if (mCursor.getCount() > 0) {
+            mAddToFavourites.setChecked(true);
+            mIsFavourite = isFavorite();
+        }
+        mCursor.close();
+    }
+
+    public boolean isFavorite() {
+        if (mCursor.getCount() > 0) {
+            return true;
         } else {
             return false;
         }
     }
-
-
 
     private void insertToFavourite() {
 
@@ -346,7 +340,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
 
         // Determine if this is a new or existing record by checking if mCurrentFilmUri is null or not
-        if (mFavouriteFilmUri == null) {
+        if (mCursor != null) {
             // This is a NEW record, so insert a new record into the provider,
             // returning the content URI for the new record.
             Uri newUri = getContentResolver().insert(FilmContract.favouriteFilmEntry.CONTENT_URI, values);
@@ -426,6 +420,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     protected void onResume() {
         getSupportLoaderManager().restartLoader(FILM_REVIEWS_LOADER_ID, null, reviewsLoader);
         getSupportLoaderManager().restartLoader(FILM_TRAILERS_LOADER_ID, null, trailerLoader);
+        checkIfMovieIsInDatabase();
+
         // getSupportLoaderManager().restartLoader(FILM_FAVOURITES_LOADER, null, favouriteLoader);
         super.onResume();
     }
