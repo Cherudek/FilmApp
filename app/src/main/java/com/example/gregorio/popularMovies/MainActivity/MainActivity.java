@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     public static final String POPULAR_MOVIES_SORT_SELECTION = "popular";
     public static final String TOP_RATED_MOVIES_SORT_SELECTION = "top_rated";
+    public static final String API_KEY = BuildConfig.API_KEY;
     final static String API_KEY_PARAM = "api_key";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int FILM_LOADER_ID = 1;
-    private static final String API_KEY = BuildConfig.API_KEY;
     private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/";
     private RecyclerView recyclerView;
 
@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     private int numberOFMovies;
 
     private SharedPreferences sharedPrefs;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

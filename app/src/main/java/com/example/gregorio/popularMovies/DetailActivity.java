@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.TrailerAdapterOnClickHandler {
 
     final static String API_KEY_PARAM = "api_key";
-    final static String API_KEY = "21d79bfbb630e90306b78b394f98db52";
+    final static String API_KEY = BuildConfig.API_KEY;
     private static final String LOG_TAG = DetailActivity.class.getSimpleName();
     private static final int FILM_REVIEWS_LOADER_ID = 2;
     private static final int FILM_TRAILERS_LOADER_ID = 5;
@@ -106,7 +106,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     private Context mContext;
 
-
     LoaderManager.LoaderCallbacks<List<Trailer>> trailerLoader = new LoaderManager.LoaderCallbacks<List<Trailer>>() {
 
         @Override
@@ -138,7 +137,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             } else {
                 showTrailerErrorMessage();
             }
-
         }
 
         @Override
@@ -146,7 +144,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             mTrailersAdapter.clear();
         }
     };
-
 
     private LoaderManager.LoaderCallbacks<List<Review>> reviewsLoader = new LoaderManager.LoaderCallbacks<List<Review>>() {
 
@@ -207,7 +204,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         poster = object.getmThumbnail();
         rating = object.getmUserRating();
 
-
         mCurrentFilmUriString = FilmContract.favouriteFilmEntry.CONTENT_URI + "/" + filmID;
 
         mTitle.setText(filmTitle);
@@ -215,14 +211,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mReleaseDate.setText(releaseDate);
         Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(mImageDisplay);
         mUserRating.setText(rating);
-
-//
-//            Context context = getApplicationContext();
-//            sharedPref = context.getSharedPreferences(
-//                    getString(R.string.saved_favourite_key), Context.MODE_PRIVATE);
-
-
-
 
         reviewsLayoutManager = new LinearLayoutManager(this);
 
@@ -420,9 +408,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     protected void onResume() {
         getSupportLoaderManager().restartLoader(FILM_REVIEWS_LOADER_ID, null, reviewsLoader);
         getSupportLoaderManager().restartLoader(FILM_TRAILERS_LOADER_ID, null, trailerLoader);
+
         checkIfMovieIsInDatabase();
 
-        // getSupportLoaderManager().restartLoader(FILM_FAVOURITES_LOADER, null, favouriteLoader);
         super.onResume();
     }
 
