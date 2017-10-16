@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gregorio.popularMovies.Adapters.FilmAdapter;
 import com.example.gregorio.popularMovies.BuildConfig;
@@ -29,7 +27,6 @@ import com.example.gregorio.popularMovies.FavouriteActivity;
 import com.example.gregorio.popularMovies.Loaders.FilmLoader;
 import com.example.gregorio.popularMovies.Models.Film;
 import com.example.gregorio.popularMovies.R;
-import com.example.gregorio.popularMovies.SettingsActivity;
 
 import java.util.List;
 
@@ -95,10 +92,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
             // Update empty state with no connection error message
             mErrorMessageDisplay.setText(R.string.no_internet);
         }
-
-
     }
-
 
     // this method dynamically calculate the number of columns and
     // the layout would adapt to the screen size and orientation
@@ -114,9 +108,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         return nColumns;
     }
 
-
-
-
     //restart the loader to check whether we have a new sort-by value coming from the settings menu
     @Override
     protected void onResume() {
@@ -125,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
     }
 
-
     @Override
     public Loader<List<Film>> onCreateLoader(int i, Bundle bundle) {
 
@@ -133,13 +123,8 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         SharedPreferences sharedPref = context.getSharedPreferences(
                 getString(R.string.settings_order_by_key), Context.MODE_PRIVATE);
 
-        //onCreateLoader() method to read the user’s latest preferences for the sort criteria,
-        //construct a proper URI with their preference, and then create a new Loader for that URI.
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-
         // Get the selected preference parameter from the SettingsActivity and pass it on to the uri builder
-        String orderBy = sharedPrefs.getString(
+        String orderBy = sharedPref.getString(
                 getString(R.string.settings_order_by_key),
                 getString(R.string.settings_order_by_default)
         );
@@ -248,32 +233,27 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            return true;
-        }
+
 
         // New Menu Options linked to sharedPreference
-        else if (id == R.id.most_popular) {
+        if (id == R.id.most_popular) {
 
             SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.settings_order_by_key), MODE_PRIVATE).edit();
             editor.putString(getString(R.string.settings_order_by_key), POPULAR_MOVIES_SORT_SELECTION);
             editor.commit();
 
-            Toast.makeText(this, "Most Popular", Toast.LENGTH_SHORT).show();
+            getLoaderManager().restartLoader(FILM_LOADER_ID, null, this);
 
             return true;
         } else if (id == R.id.most_rated) {
             SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.settings_order_by_key), MODE_PRIVATE).edit();
             editor.putString(getString(R.string.settings_order_by_key), TOP_RATED_MOVIES_SORT_SELECTION);
             editor.commit();
-            Toast.makeText(this, "Top Rated", Toast.LENGTH_SHORT).show();
 
+            getLoaderManager().restartLoader(FILM_LOADER_ID, null, this);
 
             return true;
         } else if (id == R.id.favourite_movies) {
-
 
             Intent favouriteMovie = new Intent(this, FavouriteActivity.class);
             startActivity(favouriteMovie);

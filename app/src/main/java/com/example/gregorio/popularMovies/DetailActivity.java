@@ -263,26 +263,16 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         }
 
-
         checkIfMovieIsInDatabase();
 
         mAddToFavourites.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isFavourite) {
                 if (isFavourite) {
-                    // mAddToFavourites.setChecked(sharedPref.getBoolean((getString(R.string.saved_favourite_key)), false));
-//                       SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.saved_favourite_key), MODE_PRIVATE).edit();
-//                       editor.putBoolean(getString(R.string.saved_favourite_key), true);
-//                       editor.commit();
+                    //Insert the selected film into the databasa
                     insertToFavourite();
-
                 } else {
-                    //mAddToFavourites.setChecked(sharedPref.getBoolean((getString(R.string.saved_favourite_key)), true));
-//                       SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.saved_favourite_key), MODE_PRIVATE).edit();
-//                       editor.putBoolean(getString(R.string.saved_favourite_key), false);
-//                       editor.commit();
+                    //Delete film from database
                     showDeleteConfirmationDialog();
                 }
             }
