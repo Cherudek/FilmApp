@@ -25,7 +25,7 @@
     <string name="settings_activity_name_default" translatable="false">@string/settings_activity_popular</string>
     <string name="settings_activity_popular" translatable="false">Popular Movies</string>
     <string name="settings_activity_top_rated" translatable="false">Top Rated</string>
-    <string name="saved_favourite_key" translatable="false">com.example.gregorio.popularMovies.PREFERENCE_FAVOURITE_KEY</string>
+    <string name="saved_favourite_key" translatable="false">com.example.gregorio.popularmovies.PREFERENCE_FAVOURITE_KEY</string>
 
 
     <string name="error_message">
@@ -70,6 +70,7 @@
 
     <!-- Dialog button text for the option to cancel deletion of the current record [CHAR LIMIT=20] -->
     <string name="cancel">Cancel</string>
+    <string name="synopsys">Synopsys</string>
 
 
 </resources>

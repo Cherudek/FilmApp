@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context="com.example.gregorio.popularMovies.DetailActivity">
+    tools:context="com.example.gregorio.popularmovies.DetailActivity">
 
     <ScrollView
+        android:id="@+id/scrollViewDetail"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,10 +21,10 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="@dimen/padding_medium"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/text_big"
                 android:textStyle="bold"
                 tools:text="Title" />
 
@@ -37,7 +38,7 @@
                     android:id="@+id/posterDisplay"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/padding_medium"
                     android:layout_weight="1"
                     android:contentDescription="Film Poster" />
 
@@ -45,16 +46,16 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/padding_medium"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="@dimen/padding_small">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Release Date:"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/text_medium" />
 
                     <TextView
                         android:id="@+id/release_date"
@@ -62,27 +63,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_medium"
                         tools:text="29-05-1976" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="User Rating:"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/text_medium" />
 
                     <TextView
                         android:id="@+id/user_rating"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_medium"
                         tools:text="10" />
 
                     <ToggleButton
                         android:id="@+id/add_to_favourites"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_medium"
                         android:textOff="@string/insert_to_favourites"
                         android:textOn="@string/delete_from_favourites" />
                 </LinearLayout>
@@ -93,10 +95,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:padding="8dp"
+                android:padding="@dimen/padding_small"
+                android:text="@string/synopsys"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Plot" />
+                android:textSize="@dimen/text_small" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -124,9 +126,9 @@
                         android:id="@+id/trailer__error_message_display"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:padding="@dimen/padding_medium"
                         android:text="@string/no_reviews_message"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_medium"
                         android:visibility="invisible" />
                 </LinearLayout>
             </RelativeLayout>
@@ -136,13 +138,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/rv_review"
+                    android:text="REVIEWS" />
+
 
                 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:tools="http://schemas.android.com/tools"
                     android:id="@+id/rv_review"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:context="com.example.gregorio.popularMovies.DetailActivity"></android.support.v7.widget.RecyclerView>
+                    tools:context="com.example.gregorio.popularmovies.DetailActivity"></android.support.v7.widget.RecyclerView>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -163,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:padding="16dp"
                         android:text="@string/no_reviews_message"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_medium"
                         android:visibility="invisible" />
                 </LinearLayout>
 
