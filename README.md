@@ -1,4 +1,4 @@
-# Film App
+# Popular Movies Android App
 ===================================
 
 One of the final projects produced for the Udacity Android Advanced Nanodegree.
