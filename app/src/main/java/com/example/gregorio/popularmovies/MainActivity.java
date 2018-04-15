@@ -1,4 +1,6 @@
-package com.example.gregorio.popularmovies.mainactivity;
+package com.example.gregorio.popularmovies;
+
+import static android.content.Context.MODE_PRIVATE;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -21,8 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.gregorio.popularmovies.BuildConfig;
-import com.example.gregorio.popularmovies.DetailActivity;
-import com.example.gregorio.popularmovies.FavouriteActivity;
 import com.example.gregorio.popularmovies.R;
 import com.example.gregorio.popularmovies.adapters.FilmAdapter;
 import com.example.gregorio.popularmovies.loaders.FilmLoader;
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
         Context context = getApplicationContext();
         SharedPreferences sharedPref = context.getSharedPreferences(
-                getString(R.string.settings_order_by_key), Context.MODE_PRIVATE);
+                getString(R.string.settings_order_by_key), MODE_PRIVATE);
 
         // Get the selected preference parameter from the SettingsActivity and pass it on to the uri builder
         String orderBy = sharedPref.getString(
