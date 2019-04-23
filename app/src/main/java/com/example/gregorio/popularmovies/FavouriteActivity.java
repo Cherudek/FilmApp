@@ -91,7 +91,7 @@ public class FavouriteActivity extends AppCompatActivity implements FavouritesAd
 
         layoutManager = new GridLayoutManager(this, numberOfColumns());
 
-        mFavouritesAdapter = new FavouritesAdapter(this, this);
+        mFavouritesAdapter = new FavouritesAdapter(this);
 
         recyclerViewFavourites.setHasFixedSize(true);
         recyclerViewFavourites.setLayoutManager(layoutManager);

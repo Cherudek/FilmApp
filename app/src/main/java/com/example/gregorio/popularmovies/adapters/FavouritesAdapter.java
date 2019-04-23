@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,17 +19,12 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
     public static final String LOG_TAG = FavouritesAdapter.class.getSimpleName();
 
-    private Context mContext;
     private Cursor mCursor;
 
     private FavoritesAdapterOnClickHandler mClickHandler;
 
-    private ImageView filmPoster;
-    private TextView originalTitle;
-
-    public FavouritesAdapter(FavoritesAdapterOnClickHandler clickHandler, Context context) {
+    public FavouritesAdapter(FavoritesAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
-        mContext = context;
     }
 
     @Override

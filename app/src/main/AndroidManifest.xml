@@ -9,6 +9,7 @@
 
     <application
         android:name="com.example.gregorio.popularmovies.data.StethoApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_film"

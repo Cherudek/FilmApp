@@ -1,6 +1,5 @@
 package com.example.gregorio.popularmovies;
 
-import static android.content.Context.MODE_PRIVATE;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -41,17 +40,11 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
     private static final String MOVIE_DB_API_REQUEST_URL = "http://api.themoviedb.org/3/movie/";
     private RecyclerView recyclerView;
 
-    private GridLayoutManager layoutManager;
-
     private FilmAdapter mFilmAdapter;
 
     private TextView mErrorMessageDisplay;
 
     private ProgressBar mLoadingIndicator;
-
-    private int numberOFMovies;
-
-    private SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +52,11 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         setContentView(R.layout.activity_main);
 
         /* This TextView is used to display errors and will be hidden if there are no errors */
-        mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
-        mFilmAdapter = new FilmAdapter(this, numberOFMovies);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mErrorMessageDisplay = findViewById(R.id.tv_error_message_display);
+        mFilmAdapter = new FilmAdapter(this);
+        recyclerView = findViewById(R.id.recycler_view);
 
-        layoutManager = new GridLayoutManager(this, numberOfColumns());
+        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns());
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -162,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         // If there is a valid list of {@link movie}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
-            numberOFMovies = movies.size();
             mFilmAdapter.addAll(movies);
             showMovieDataView();
         } else {
@@ -239,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
 
             SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.settings_order_by_key), MODE_PRIVATE).edit();
             editor.putString(getString(R.string.settings_order_by_key), POPULAR_MOVIES_SORT_SELECTION);
-            editor.commit();
+            editor.apply();
 
             getLoaderManager().restartLoader(FILM_LOADER_ID, null, this);
 
@@ -247,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements FilmAdapter.FilmA
         } else if (id == R.id.most_rated) {
             SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.settings_order_by_key), MODE_PRIVATE).edit();
             editor.putString(getString(R.string.settings_order_by_key), TOP_RATED_MOVIES_SORT_SELECTION);
-            editor.commit();
+            editor.apply();
 
             getLoaderManager().restartLoader(FILM_LOADER_ID, null, this);
 

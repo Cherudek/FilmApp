@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
@@ -34,9 +35,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
      * @param clickHandler The on-click handler for this adapter. This single handler is called
      *                     when an item is clicked.
      */
-    public FilmAdapter(FilmAdapterOnClickHandler clickHandler, int numberOfItems) {
+    public FilmAdapter(FilmAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
-        int items = numberOfItems;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
     public void addAll(List<Film> movies) {
         if (mMovieData != null)
             mMovieData.clear();
-        mMovieData.addAll(movies);
+        Objects.requireNonNull(mMovieData).addAll(movies);
         notifyDataSetChanged();
     }
 
