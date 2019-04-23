@@ -4,4 +4,4 @@
     android:name="com.example.gregorio.popularmovies.SettingsActivity$FilmPreferenceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gregorio.popularmovies.SettingsActivity"></fragment>
+    tools:context="com.example.gregorio.popularmovies.SettingsActivity" />

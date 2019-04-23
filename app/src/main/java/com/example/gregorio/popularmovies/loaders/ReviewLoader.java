@@ -1,7 +1,9 @@
 package com.example.gregorio.popularmovies.loaders;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
+
+
+import androidx.loader.content.AsyncTaskLoader;
 
 import com.example.gregorio.popularmovies.models.Review;
 import com.example.gregorio.popularmovies.queryutils.QueryReviewUtils;

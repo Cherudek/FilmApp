@@ -10,13 +10,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gregorio.popularmovies.adapters.FavouritesAdapter;
 import com.example.gregorio.popularmovies.data.FilmContract;
@@ -81,11 +83,11 @@ public class FavouriteActivity extends AppCompatActivity implements FavouritesAd
         setContentView(R.layout.activity_favourite);
         getSupportActionBar().setElevation(0f);
 
-        recyclerViewFavourites = (RecyclerView) findViewById(R.id.favourites_recycler_view);
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.favourites_loading_spinner);
+        recyclerViewFavourites = findViewById(R.id.favourites_recycler_view);
+        mLoadingIndicator = findViewById(R.id.favourites_loading_spinner);
 
         /* This TextView is used to display errors and will be hidden if there are no errors */
-        mErrorMessageDisplay = (TextView) findViewById(R.id.favourites_error_message_display);
+        mErrorMessageDisplay = findViewById(R.id.favourites_error_message_display);
 
         layoutManager = new GridLayoutManager(this, numberOfColumns());
 

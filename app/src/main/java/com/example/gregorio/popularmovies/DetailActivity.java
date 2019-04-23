@@ -12,11 +12,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -26,6 +21,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gregorio.popularmovies.adapters.ReviewAdapter;
 import com.example.gregorio.popularmovies.adapters.TrailerAdapter;
@@ -215,7 +216,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mTitle.setText(filmTitle);
         mPlot.setText(plot);
         mReleaseDate.setText(releaseDate);
-        Picasso.with(mImageDisplay.getContext()).load("http://image.tmdb.org/t/p/w342/" + poster).into(mImageDisplay);
+        Picasso.get().load("http://image.tmdb.org/t/p/w342/" + poster).into(mImageDisplay);
         mUserRating.setText(rating);
 
         reviewsLayoutManager = new LinearLayoutManager(this);

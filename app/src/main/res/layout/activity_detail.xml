@@ -107,7 +107,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_trailers"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -134,7 +134,7 @@
             </RelativeLayout>
 
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -144,13 +144,11 @@
                     android:layout_alignTop="@+id/rv_review"
                     android:text="REVIEWS" />
 
-
-                <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
+                <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_review"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:context="com.example.gregorio.popularmovies.DetailActivity"></android.support.v7.widget.RecyclerView>
+                    tools:context="com.example.gregorio.popularmovies.DetailActivity" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

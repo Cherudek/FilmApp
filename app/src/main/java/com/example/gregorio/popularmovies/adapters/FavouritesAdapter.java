@@ -2,13 +2,14 @@ package com.example.gregorio.popularmovies.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gregorio.popularmovies.R;
 import com.example.gregorio.popularmovies.data.FilmContract;
@@ -72,7 +73,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         holder.itemView.setTag(vote);
         holder.itemView.setTag(date);
 
-        Picasso.with(holder.img.getContext())
+        Picasso.get()
                 .load("http://image.tmdb.org/t/p/w185/" + imagePath)
                 .into(holder.img);
 
@@ -123,7 +124,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
         public FavouriteHolder(View itemView) {
             super(itemView);
-            img = (ImageView) itemView.findViewById(R.id.favourite_imageView);
+            img = itemView.findViewById(R.id.favourite_imageView);
             itemView.setOnClickListener(this);
         }
 

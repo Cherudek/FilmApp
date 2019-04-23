@@ -1,11 +1,12 @@
 package com.example.gregorio.popularmovies.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gregorio.popularmovies.R;
 import com.example.gregorio.popularmovies.models.Film;
@@ -53,7 +54,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
     public void onBindViewHolder(FilmHolder holder, int position) {
         Film currentFilm = mMovieData.get(position);
         String filmPoster = currentFilm.getmThumbnail();
-        Picasso.with(holder.img.getContext()).load("http://image.tmdb.org/t/p/w342/" + filmPoster).into(holder.img);
+        Picasso.get().load("http://image.tmdb.org/t/p/w342/" + filmPoster).into(holder.img);
     }
 
     @Override
@@ -96,7 +97,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.FilmHolder> {
 
         public FilmHolder(View itemView) {
             super(itemView);
-            img = (ImageView) itemView.findViewById(R.id.imageView);
+            img = itemView.findViewById(R.id.imageView);
             itemView.setOnClickListener(this);
         }
 
